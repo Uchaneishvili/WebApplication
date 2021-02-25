@@ -2,11 +2,12 @@ import "./UserTable.css";
 import Axios from "axios";
 import React, { useState, useEffect } from "react";
 import Popup from "./Popup.js";
-import Pagination from "./Pagination.js";
 import Modal from "react-modal";
+import Pagination from "./Pagination";
+import Search from "./Search";
 
-function UserTable({ userList }) {
-  const [setuserList] = useState([]);
+function UserTable() {
+  const [userList, setuserList] = useState([]);
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const [userDataForTable, setUserDataForTable] = useState();
   const [selectedEditUser, setSelectedEditUser] = useState();
@@ -40,19 +41,20 @@ function UserTable({ userList }) {
     loadData();
   };
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   return (
     <div className="container">
       <pre>{JSON.stringify(selectedEditUser, null, 2)}</pre>
-      <div className="centerButtonContainer">
-        <button
-          type="button"
-          className="btn btn-light custom-button"
-          onClick={editClick}
-        >
-          Add User
-        </button>
+      <div className="SearchAndAddUserContainer">
+        <div className="centerButtonContainer">
+          <button
+            type="button"
+            className="btn btn-light custom-button"
+            onClick={editClick}
+          >
+            Add User
+          </button>
+        </div>
+        <Search />
       </div>
       <div className="userListContainer">
         <div className="mapData">
@@ -104,6 +106,7 @@ function UserTable({ userList }) {
         </div>
       </div>
       <Popup isOpen={modalIsOpen}>{}</Popup>
+      <Pagination />
     </div>
   );
 }

@@ -29,20 +29,45 @@ app.post("/insert", async (req, res) => {
   try {
     await user.save();
     res.send("inserted Data 2");
-  } catch (err) {
-    console.log(err);
-    res.send(err);
+  } catch (error) {
+    console.log(error);
+    res.send(error);
   }
 });
 
 app.get("/read", async (req, res) => {
-  userModel.find({}, (err, result) => {
-    if (err) {
-      res.send(err);
-    }
+  // let test = userModel.find({});
 
+  // res.send(test);
+
+  try {
+    let query = userModel.find({});
+
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const skip = (page - 1) * pageSize;
+    const total = await userModel.countDocuments();
+
+    const pages = Math.ceil(total / pageSize);
+
+    query = query.skip(skip).limit(pageSize);
+    const result = await query;
     res.send(result);
-  });
+    res.status(200).json({
+      status: "Success",
+      count: result.length,
+      page,
+      pages,
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      status: "Failed",
+      message: "Server Error",
+    });
+  }
 });
 
 app.put("/update", async (request, res) => {

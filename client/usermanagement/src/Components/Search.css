@@ -1,0 +1,17 @@
+.SearchContainer {
+  width: 100%;
+  display: flex !important;
+  order: 0;
+  flex: 0 1 auto;
+  align-self: auto;
+}
+
+.SearchButton {
+  width: 100px !important;
+}
+
+.SearchInput {
+  width: 350px !important;
+  height: 46px !important;
+  max-width: 350px;
+}
