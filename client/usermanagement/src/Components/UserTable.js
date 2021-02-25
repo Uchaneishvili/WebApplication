@@ -2,10 +2,11 @@ import "./UserTable.css";
 import Axios from "axios";
 import React, { useState, useEffect } from "react";
 import Popup from "./Popup.js";
+import Pagination from "./Pagination.js";
 import Modal from "react-modal";
 
-function UserTable() {
-  const [userList, setuserList] = useState([]);
+function UserTable({ userList }) {
+  const [setuserList] = useState([]);
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const [userDataForTable, setUserDataForTable] = useState();
   const [selectedEditUser, setSelectedEditUser] = useState();
@@ -38,6 +39,8 @@ function UserTable() {
     await Axios.delete(`http://localhost:3001/delete/${id}`);
     loadData();
   };
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="container">
