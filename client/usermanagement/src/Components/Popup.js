@@ -2,20 +2,23 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Axios from "axios";
 import Modal from "react-modal";
+import "./Popup.css";
 function Popup(props) {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const [userList, setuserList] = useState([]);
   const [userDataForTable, setUserDataForTable] = useState();
-  const [selectedEditUser, setSelectedEditUser] = useState();
   const { register, handleSubmit, errors } = useForm();
 
-  console.log(props);
+  useEffect(() => {
+    setmodalIsOpen(props.isOpen);
+  }, [props]);
+
   const onSubmit = () => {
     if (
-      selectedEditUser.firstName &&
-      selectedEditUser.lastName &&
-      selectedEditUser.phone &&
-      selectedEditUser.email
+      props.selectedEditUser.firstName &&
+      props.selectedEditUser.lastName &&
+      props.selectedEditUser.phone &&
+      props.selectedEditUser.email
     ) {
       setmodalIsOpen(false);
     }
@@ -31,20 +34,20 @@ function Popup(props) {
   };
 
   const addOrUpdateUser = async () => {
-    if (selectedEditUser && selectedEditUser._id) {
+    if (props.selectedEditUser && props.selectedEditUser._id) {
       await Axios.put("http://localhost:3001/update", {
-        _id: selectedEditUser._id,
-        firstName: selectedEditUser.firstName,
-        lastName: selectedEditUser.lastName,
-        email: selectedEditUser.email,
-        phone: selectedEditUser.phone,
+        id: props.selectedEditUser._id,
+        firstName: props.selectedEditUser.firstName,
+        lastName: props.selectedEditUser.lastName,
+        email: props.selectedEditUser.email,
+        phone: props.selectedEditUser.phone,
       });
     } else {
       await Axios.post("http://localhost:3001/insert", {
-        firstName: selectedEditUser.firstName,
-        lastName: selectedEditUser.lastName,
-        email: selectedEditUser.email,
-        phone: selectedEditUser.phone,
+        firstName: props.selectedEditUser.firstName,
+        lastName: props.selectedEditUser.lastName,
+        email: props.selectedEditUser.email,
+        phone: props.selectedEditUser.phone,
       });
     }
     loadData();
@@ -52,11 +55,11 @@ function Popup(props) {
 
   return (
     <div>
-      <Modal className="Modal" ariaHideApp={false} isOpen={props.modalIsOpen}>
+      <Modal className="Modal" ariaHideApp={false} isOpen={modalIsOpen}>
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              {selectedEditUser && selectedEditUser._id ? (
+              {props.selectedEditUser && props.selectedEditUser._id ? (
                 <h5 className="modal-title" id="exampleModalLabel">
                   Update User Information
                 </h5>
@@ -81,15 +84,15 @@ function Popup(props) {
                   <label>First Name: </label>
                   <input
                     type="text"
-                    defaultValue={selectedEditUser?.firstName}
+                    defaultValue={props.selectedEditUser}
                     className="form-control firstName"
                     placeholder="Enter your first name"
                     aria-label="Firstname"
                     name="firstName"
                     ref={register({ required: true })}
                     onChange={(event) => {
-                      setSelectedEditUser({
-                        ...selectedEditUser,
+                      props.setSelectedEditUser({
+                        ...props.selectedEditUser,
                         firstName: event.target.value,
                       });
                     }}
@@ -103,14 +106,14 @@ function Popup(props) {
                   <label>Last Name: </label>
                   <input
                     type="text"
-                    defaultValue={selectedEditUser?.lastName}
+                    defaultValue={props.selectedEditUser?.lastName}
                     className="form-control"
                     placeholder="Enter your last name"
                     name="lastName"
                     ref={register({ required: true })}
                     onChange={(event) => {
-                      setSelectedEditUser({
-                        ...selectedEditUser,
+                      props.setSelectedEditUser({
+                        ...props.selectedEditUser,
                         lastName: event.target.value,
                       });
                     }}
@@ -124,14 +127,14 @@ function Popup(props) {
                   <label>Email address: </label>
                   <input
                     type="text"
-                    defaultValue={selectedEditUser?.email}
+                    defaultValue={props.selectedEditUser?.email}
                     className="form-control"
                     placeholder="Enter your email"
                     name="email"
                     ref={register({ required: true })}
                     onChange={(event) => {
-                      setSelectedEditUser({
-                        ...selectedEditUser,
+                      props.setSelectedEditUser({
+                        ...props.selectedEditUser,
                         email: event.target.value,
                       });
                     }}
@@ -146,7 +149,7 @@ function Popup(props) {
                   <label>Phone: </label>
                   <input
                     type="number"
-                    defaultValue={selectedEditUser?.phone}
+                    defaultValue={props.selectedEditUser?.phone}
                     className="form-control"
                     placeholder="Enter your phone"
                     name="phone"
@@ -156,8 +159,8 @@ function Popup(props) {
                       maxLength: 9,
                     })}
                     onChange={(event) => {
-                      setSelectedEditUser({
-                        ...selectedEditUser,
+                      props.setSelectedEditUser({
+                        ...props.selectedEditUser,
                         phone: event.target.value,
                       });
                     }}

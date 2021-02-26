@@ -11,26 +11,30 @@ function UserTable() {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const [userDataForTable, setUserDataForTable] = useState();
   const [selectedEditUser, setSelectedEditUser] = useState();
+  const [userValue, setUserValue] = useState(false);
 
-  const editClick = () => {
+  const createUserClick = () => {
     setSelectedEditUser({});
     setmodalIsOpen(true);
+    setUserValue(true);
   };
 
   function editUser(user) {
     setSelectedEditUser(user);
     setmodalIsOpen(true);
-    loadData();
+    console.log(user);
+    // loadData();
   }
 
-  useEffect(() => {
-    loadData();
-  }, [selectedEditUser]);
+  const loadData = async (page, search) => {
+    let url = `http://localhost:3001/read?page=${page}`;
+    if (search) {
+      url += `&search=${search}`;
+    }
 
-  const loadData = async () => {
-    await Axios.get("http://localhost:3001/read")
+    await Axios.get(url)
       .then((response) => {
-        setuserList(response.data);
+        setuserList(response.data.data);
       })
       .then((receivedData) => setUserDataForTable(receivedData))
       .catch((err) => console.error(err));
@@ -49,7 +53,7 @@ function UserTable() {
           <button
             type="button"
             className="btn btn-light custom-button"
-            onClick={editClick}
+            onClick={createUserClick}
           >
             Add User
           </button>
@@ -93,7 +97,7 @@ function UserTable() {
                       </button>
                       <button
                         className="btn btn-success updateTableButton"
-                        onClick={() => editUser(val)}
+                        onClick={() => editUser(val._id)}
                       >
                         Update
                       </button>
@@ -105,8 +109,15 @@ function UserTable() {
           </table>
         </div>
       </div>
-      <Popup isOpen={modalIsOpen}>{}</Popup>
-      <Pagination />
+      <Popup
+        setSelectedEditUser={setSelectedEditUser}
+        selectedEditUser={selectedEditUser}
+        setUserValue={setUserValue}
+        isOpen={modalIsOpen}
+      >
+        {}
+      </Popup>
+      <Pagination loadData={loadData} />
     </div>
   );
 }

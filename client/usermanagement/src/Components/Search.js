@@ -6,10 +6,13 @@ function Search() {
     <div className="SearchContainer">
       <input
         type="text"
-        class="form-control SearchInput"
+        className="form-control SearchInput"
         placeholder="Search..."
       />
-      <button class="btn btn-light custom-button SearchButton" type="button">
+      <button
+        className="btn btn-light custom-button SearchButton"
+        type="button"
+      >
         Search
       </button>
     </div>

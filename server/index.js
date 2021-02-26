@@ -41,7 +41,11 @@ app.get("/read", async (req, res) => {
   // res.send(test);
 
   try {
-    let query = userModel.find({});
+    let q = {};
+    if (req.query.search) {
+      q.firstName = req.query.search;
+    }
+    let query = userModel.find(q);
 
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
@@ -52,7 +56,7 @@ app.get("/read", async (req, res) => {
 
     query = query.skip(skip).limit(pageSize);
     const result = await query;
-    res.send(result);
+
     res.status(200).json({
       status: "Success",
       count: result.length,
