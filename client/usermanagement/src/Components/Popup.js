@@ -7,12 +7,10 @@ function Popup(props) {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const [userList, setuserList] = useState([]);
   const [userDataForTable, setUserDataForTable] = useState();
+  const [selectedEditUser, setSelectedEditUser] = useState();
   const { register, handleSubmit, errors } = useForm();
 
-  useEffect(() => {
-    setmodalIsOpen(props.isOpen);
-  }, [props]);
-
+  console.log(props);
   const onSubmit = () => {
     if (
       props.selectedEditUser.firstName &&
@@ -23,6 +21,11 @@ function Popup(props) {
       setmodalIsOpen(false);
     }
   };
+
+  useEffect(() => {
+    setmodalIsOpen(props.modalIsOpen);
+    console.log("modal");
+  }, [props.modalIsOpen]);
 
   const loadData = async () => {
     await Axios.get("http://localhost:3001/read")
@@ -36,7 +39,7 @@ function Popup(props) {
   const addOrUpdateUser = async () => {
     if (props.selectedEditUser && props.selectedEditUser._id) {
       await Axios.put("http://localhost:3001/update", {
-        id: props.selectedEditUser._id,
+        _id: props.selectedEditUser._id,
         firstName: props.selectedEditUser.firstName,
         lastName: props.selectedEditUser.lastName,
         email: props.selectedEditUser.email,
@@ -51,6 +54,7 @@ function Popup(props) {
       });
     }
     loadData();
+    console.log("data");
   };
 
   return (
@@ -72,7 +76,7 @@ function Popup(props) {
                 type="button"
                 className="btn-close"
                 data-bs-dismiss="modal"
-                onClick={() => setmodalIsOpen(false)}
+                onClick={() => props.closePopup}
               >
                 X
               </button>
@@ -84,7 +88,7 @@ function Popup(props) {
                   <label>First Name: </label>
                   <input
                     type="text"
-                    defaultValue={props.selectedEditUser}
+                    defaultValue={props.selectedEditUser?.firstName}
                     className="form-control firstName"
                     placeholder="Enter your first name"
                     aria-label="Firstname"

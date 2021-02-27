@@ -11,19 +11,16 @@ function UserTable() {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const [userDataForTable, setUserDataForTable] = useState();
   const [selectedEditUser, setSelectedEditUser] = useState();
-  const [userValue, setUserValue] = useState(false);
+  const [pages, setPages] = useState();
 
-  const createUserClick = () => {
+  const editClick = () => {
     setSelectedEditUser({});
     setmodalIsOpen(true);
-    setUserValue(true);
   };
 
   function editUser(user) {
     setSelectedEditUser(user);
     setmodalIsOpen(true);
-    console.log(user);
-    // loadData();
   }
 
   const loadData = async (page, search) => {
@@ -35,9 +32,12 @@ function UserTable() {
     await Axios.get(url)
       .then((response) => {
         setuserList(response.data.data);
+        setPages(response.data.pages);
       })
       .then((receivedData) => setUserDataForTable(receivedData))
       .catch((err) => console.error(err));
+
+    // const { data, pages: totalPages } = await url.data();
   };
 
   const deleteUser = async (id) => {
@@ -45,20 +45,26 @@ function UserTable() {
     loadData();
   };
 
+  const closePopup = () => {
+    setmodalIsOpen(false);
+  };
+
   return (
     <div className="container">
       <pre>{JSON.stringify(selectedEditUser, null, 2)}</pre>
+      <pre>{JSON.stringify(modalIsOpen, null, 2)}</pre>
+
       <div className="SearchAndAddUserContainer">
         <div className="centerButtonContainer">
           <button
             type="button"
             className="btn btn-light custom-button"
-            onClick={createUserClick}
+            onClick={editClick}
           >
             Add User
           </button>
         </div>
-        <Search />
+        <Search loadData={loadData} />
       </div>
       <div className="userListContainer">
         <div className="mapData">
@@ -73,7 +79,7 @@ function UserTable() {
               </tr>
             </thead>
             <tbody>
-              {userList.map((val, key) => {
+              {userList.map((val) => {
                 return (
                   <tr key={val._id}>
                     <td scope="col" className="firstNameTable" id="FirstName">
@@ -97,7 +103,7 @@ function UserTable() {
                       </button>
                       <button
                         className="btn btn-success updateTableButton"
-                        onClick={() => editUser(val._id)}
+                        onClick={() => editUser(val)}
                       >
                         Update
                       </button>
@@ -112,12 +118,12 @@ function UserTable() {
       <Popup
         setSelectedEditUser={setSelectedEditUser}
         selectedEditUser={selectedEditUser}
-        setUserValue={setUserValue}
-        isOpen={modalIsOpen}
+        modalIsOpen={modalIsOpen}
+        closePopup={closePopup}
       >
         {}
       </Popup>
-      <Pagination loadData={loadData} />
+      <Pagination loadData={loadData} totalPages={pages} />
     </div>
   );
 }

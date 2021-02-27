@@ -16,7 +16,6 @@ mongoose.connect(
 
 app.post("/insert", async (req, res) => {
   console.log(req.body);
-  // es6 syntax destructure variables from object
   const { firstName, lastName, phone, email } = req.body;
 
   const user = new userModel({
@@ -36,10 +35,6 @@ app.post("/insert", async (req, res) => {
 });
 
 app.get("/read", async (req, res) => {
-  // let test = userModel.find({});
-
-  // res.send(test);
-
   try {
     let q = {};
     if (req.query.search) {
@@ -50,7 +45,7 @@ app.get("/read", async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
     const skip = (page - 1) * pageSize;
-    const total = await userModel.countDocuments();
+    const total = await userModel.countDocuments(q);
 
     const pages = Math.ceil(total / pageSize);
 
@@ -75,11 +70,11 @@ app.get("/read", async (req, res) => {
 });
 
 app.put("/update", async (request, res) => {
-  const { firstName, lastName, phone, email, _id } = request.body;
   console.log(request.body);
+  const { firstName, lastName, phone, email, _id } = request.body;
 
   try {
-    await userModel.findById(_id, (err, updateUser) => {
+    await userModel.findById(_id, (updateUser) => {
       updateUser.firstName = firstName;
       updateUser.lastName = lastName;
       updateUser.email = email;

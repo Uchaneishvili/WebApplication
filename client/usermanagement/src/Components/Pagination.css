@@ -1,0 +1,15 @@
+.page-link:disabled {
+  cursor: not-allowed;
+  background-color: rgba(195, 195, 195, 0.3);
+}
+
+.page-link {
+  background-color: yellow !important;
+}
+
+.body .page-link {
+  background-color: yellow !important;
+}
+.a .page-link {
+  background-color: teal;
+}
