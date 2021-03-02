@@ -7,7 +7,6 @@ function Popup(props) {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const [userList, setuserList] = useState([]);
   const [userDataForTable, setUserDataForTable] = useState();
-  const [selectedEditUser, setSelectedEditUser] = useState();
   const { register, handleSubmit, errors } = useForm();
 
   console.log(props);

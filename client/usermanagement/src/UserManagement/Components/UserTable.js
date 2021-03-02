@@ -2,14 +2,12 @@ import "./UserTable.css";
 import Axios from "axios";
 import React, { useState, useEffect } from "react";
 import Popup from "./Popup.js";
-import Modal from "react-modal";
 import Pagination from "./Pagination";
 import Search from "./Search";
 
 function UserTable() {
   const [userList, setuserList] = useState([]);
   const [modalIsOpen, setmodalIsOpen] = useState(false);
-  const [userDataForTable, setUserDataForTable] = useState();
   const [selectedEditUser, setSelectedEditUser] = useState();
   const [pages, setPages] = useState();
 
@@ -29,15 +27,10 @@ function UserTable() {
       url += `&search=${search}`;
     }
 
-    await Axios.get(url)
-      .then((response) => {
-        setuserList(response.data.data);
-        setPages(response.data.pages);
-      })
-      .then((receivedData) => setUserDataForTable(receivedData))
-      .catch((err) => console.error(err));
-
-    // const { data, pages: totalPages } = await url.data();
+    await Axios.get(url).then((response) => {
+      setuserList(response.data.data);
+      setPages(response.data.pages);
+    });
   };
 
   const deleteUser = async (id) => {
@@ -120,9 +113,7 @@ function UserTable() {
         selectedEditUser={selectedEditUser}
         modalIsOpen={modalIsOpen}
         closePopup={closePopup}
-      >
-        {}
-      </Popup>
+      />
       <Pagination loadData={loadData} totalPages={pages} />
     </div>
   );

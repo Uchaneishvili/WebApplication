@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
 const userModel = require("./models/User");
+const carsModel = require("./models/Cars");
 
 app.use(express.json());
 app.use(cors());
@@ -31,6 +32,58 @@ app.post("/insert", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.send(error);
+  }
+});
+
+app.post("/cars/insert", async (res, req) => {
+  console.log(req.body);
+  const { manufacturer, model } = req.body;
+
+  const cars = new carsModel({
+    manufacturer: manufacturer,
+    model: model,
+  });
+
+  try {
+    await cars.save();
+    res.send("inserted data");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/cars/read", async (req, res) => {
+  try {
+    let q = {};
+    if (req.query.search) {
+      q.manufacturer = req.query.search;
+    }
+    let query = carsModel.find(q);
+
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const skip = (page - 1) * pageSize;
+    const total = await carsModel.countDocuments(q);
+
+    const pages = Math.ceil(total / pageSize);
+
+    query = query.skip(skip).limit(pageSize);
+    const result = await query;
+
+    res.status(200).json({
+      status: "Success",
+      count: result.length,
+      page,
+      pages,
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      status: "Failed",
+      message: "Server Error",
+    });
   }
 });
 
@@ -67,6 +120,13 @@ app.get("/read", async (req, res) => {
       message: "Server Error",
     });
   }
+});
+
+app.delete("/cars/delete:id", async (req, res) => {
+  const id = req.params.id;
+
+  await carsModel.findByIdAndRemove(id).exec();
+  res.send("deleted");
 });
 
 app.put("/update", async (request, res) => {
