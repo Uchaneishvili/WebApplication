@@ -35,9 +35,10 @@ app.post("/insert", async (req, res) => {
   }
 });
 
-app.post("/cars/insert", async (res, req) => {
-  console.log(req.body);
+app.post("/cars/insert", async (req, res) => {
   const { manufacturer, model } = req.body;
+
+  console.log(req.body);
 
   const cars = new carsModel({
     manufacturer: manufacturer,
@@ -46,7 +47,7 @@ app.post("/cars/insert", async (res, req) => {
 
   try {
     await cars.save();
-    res.send("inserted data");
+    res.send("inserted cars data");
   } catch (error) {
     console.log(error);
   }
@@ -129,6 +130,23 @@ app.delete("/cars/delete:id", async (req, res) => {
   res.send("deleted");
 });
 
+app.put("cars/update", async (req, res) => {
+  const { Manufacturer, Model, _id } = req.body;
+  console.log(req.body);
+  console.log(carsModel);
+
+  try {
+    await carsModel.findById(_id, (updateCar) => {
+      updateCar.manufacturer = Manufacturer;
+      updateCar.model = Model;
+      updateCar.save();
+      res.send("update");
+    });
+  } catch (err) {
+    console.oog(err);
+  }
+});
+
 app.put("/update", async (request, res) => {
   console.log(request.body);
   const { firstName, lastName, phone, email, _id } = request.body;
@@ -142,8 +160,8 @@ app.put("/update", async (request, res) => {
       updateUser.save();
       res.send("Update");
     });
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    console.log(error);
   }
 });
 

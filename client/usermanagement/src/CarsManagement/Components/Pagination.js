@@ -17,7 +17,7 @@ function Pagination(props) {
 
   const generatePages = (pagenum) => {
     const p = [];
-    for (let i = 1; i < pagenum; i++) {
+    for (let i = 1; i <= pagenum; i++) {
       p.push(
         <li className="page-item current" key={`page-${i}`}>
           <button className="page-link" onClick={() => setPage(i)}>
@@ -25,8 +25,8 @@ function Pagination(props) {
           </button>
         </li>
       );
-      return p;
     }
+    return p;
   };
   return (
     <div>

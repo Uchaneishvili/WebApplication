@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Axios from "axios";
 import Popup from "./Popup";
 import Pagination from "./Pagination";
+import Search from "./Search";
 
 function CarsTable() {
   const [carsList, setCarsList] = useState();
@@ -10,8 +11,13 @@ function CarsTable() {
   const [modal, setModal] = useState();
 
   const addCar = () => {
-    setCar();
     setModal(true);
+    setCar({});
+  };
+
+  const editCar = (cars) => {
+    setModal(true);
+    setCar(cars);
   };
 
   const loadData = async (page, search) => {
@@ -27,7 +33,7 @@ function CarsTable() {
   };
 
   const deleteCar = async (id) => {
-    await Axios.delete(`http://localhost:3001/delete/${id}`);
+    await Axios.delete(`http://localhost:3001/cars/delete/${id}`);
 
     loadData();
   };
@@ -35,7 +41,6 @@ function CarsTable() {
   return (
     <div className="container">
       <pre>{JSON.stringify(car, null, 2)}</pre>
-      <pre>{JSON.stringify(carsList, null, 2)}</pre>
 
       <div className="SearchAndAddUserContainer">
         <div className="centerButtonContainer">
@@ -47,51 +52,50 @@ function CarsTable() {
             Add Car
           </button>
         </div>
+        <Search loadData={loadData} />
       </div>
 
-      <div className="userListContainer">
-        <div className="mapData">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Manufacturer</th>
-                <th>Model</th>
-                <th>Action</th>
-              </tr>
-            </thead>
+      <table className="table table-hover">
+        <thead>
+          <tr>
+            <th>Manufacturer</th>
+            <th>Model</th>
+            <th>Action</th>
+          </tr>
+        </thead>
 
-            {/* {generateRecords()} */}
-            {carsList &&
-              carsList.map((val) => {
-                return (
-                  <tbody key={val._id}>
-                    <tr>
-                      <td scope="col" className="firstNameTable" id="FirstName">
-                        {val.Manufacturer}
-                      </td>
-                      <td scope="col" className="lastNameTable" id="LastName">
-                        {val.Model}
-                      </td>
-                      <td scope="col" className="buttonsContainer" id="Action">
-                        <button
-                          className="btn btn-danger deteleTableButton"
-                          onClick={() => deleteCar(val._id)}
-                        >
-                          delete
-                        </button>
-                        <button className="btn btn-success updateTableButton">
-                          Update
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                );
-              })}
-          </table>
-        </div>
-      </div>
-      <Pagination totalPage={pages} loadData={loadData} />
-      <Popup />
+        {carsList &&
+          carsList.map((val) => {
+            return (
+              <tbody key={val._id}>
+                <tr>
+                  <td scope="col" className="manufacturer" id="Manufacturer">
+                    {val.manufacturer} {val.Manufacturer}
+                  </td>
+                  <td scope="col" className="model" id="Manufacturer">
+                    {val.model} {val.Model}
+                  </td>
+                  <td scope="col" className="buttonsContainer" id="Action">
+                    <button
+                      className="btn btn-danger deteleTableButton"
+                      onClick={() => deleteCar(val._id)}
+                    >
+                      delete
+                    </button>
+                    <button
+                      className="btn btn-success updateTableButton"
+                      onClick={() => editCar(val)}
+                    >
+                      Update
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            );
+          })}
+      </table>
+      <Pagination totalPages={pages} loadData={loadData} />
+      <Popup modal={modal} car={car} loadData={loadData} setCar={setCar} />
     </div>
   );
 }

@@ -1,124 +1,116 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
-function Popup() {
+function Popup(props) {
+  const { register, handleSubmit, errors } = useForm();
+  const [popupEnable, setPopupEnable] = useState();
+
+  useEffect(() => {
+    setPopupEnable(props.modal);
+
+    console.log(props.modal);
+  }, [props.modal]);
+
+  const onSubmit = () => {
+    if (props.car.Manufacturer && props.car.Model) {
+      setPopupEnable(false);
+    }
+  };
+
+  const closeButton = () => {
+    setPopupEnable(false);
+  };
+
+  const addOrUpdateCar = async () => {
+    if (props.car && props.car._id) {
+      await axios.put("http://localhost:3001/cars/update", {
+        _id: props.car._id,
+        manufacturer: props.car.Manufacturer,
+        model: props.car.Model,
+      });
+    } else {
+      await axios.post("http://localhost:3001/cars/insert", {
+        manufacturer: props.car.Manufacturer,
+        model: props.car.Model,
+      });
+    }
+    props.loadData();
+  };
+
   return (
     <div>
       <div>
-        <Modal className="Modal" ariaHideApp={false}>
+        <Modal className="Modal" ariaHideApp={false} isOpen={popupEnable}>
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                {/* {props.selectedEditUser && props.selectedEditUser._id ? ( */}
-                <h5 className="modal-title" id="exampleModalLabel">
-                  Update User Information
-                </h5>
-                {/* ) : ( */}
-                <h5 className="modal=title" id="exampleModalLabel1">
-                  Create User
-                </h5>
-                {/* )} */}
+                {props.car && props.car._id ? (
+                  <h5 className="modal-title" id="exampleModalLabel">
+                    Update Car's Information
+                  </h5>
+                ) : (
+                  <h5 className="modal=title" id="exampleModalLabel1">
+                    Add Car
+                  </h5>
+                )}
                 <button
                   type="button"
                   className="btn-close"
                   data-bs-dismiss="modal"
-                  //   onClick={() => props.closePopup}
+                  onClick={() => closeButton()}
                 >
                   X
                 </button>
               </div>
 
               <div>
-                <form className="popupForm">
+                <form className="popupForm" onSubmit={handleSubmit(onSubmit)}>
                   <div className="form-group popup">
-                    <label>First Name: </label>
+                    <label>Manufacturer </label>
                     <input
                       type="text"
-                      //   defaultValue={props.selectedEditUser?.firstName}
-                      className="form-control firstName"
-                      placeholder="Enter your first name"
-                      aria-label="Firstname"
-                      name="firstName"
-                      //   ref={register({ required: true })}
-                      //   onChange={(event) => {
-                      // props.setSelectedEditUser({
-                      //   ...props.selectedEditUser,
-                      //   firstName: event.target.value,
-                      // });
-                      //   }}
+                      defaultValue={props.car?.Manufacturer}
+                      className="form-control manufacturer"
+                      placeholder="Enter manufacturer of the car"
+                      name="manufacturer"
+                      ref={register({ required: true })}
+                      onChange={(event) => {
+                        props.setCar({
+                          ...props.car,
+                          Manufacturer: event.target.value,
+                        });
+                      }}
                     />
-                    {/* {errors.firstName && ( */}
-                    <div className="validation">Please choose a username.</div>
-                    {/* )} */}
+                    {errors.manufacturer && (
+                      <div className="validation">
+                        Please choose a manufacturer.
+                      </div>
+                    )}
                   </div>
 
                   <div className="form-group popup">
-                    <label>Last Name: </label>
+                    <label>Model </label>
                     <input
                       type="text"
-                      //   defaultValue={props.selectedEditUser?.lastName}
+                      defaultValue={props.car?.Model}
                       className="form-control"
-                      placeholder="Enter your last name"
-                      name="lastName"
-                      //   ref={register({ required: true })}
-                      //   onChange={(event) => {
-                      // props.setSelectedEditUser({
-                      //   ...props.selectedEditUser,
-                      //   lastName: event.target.value,
-                      // });
-                      //   }}
+                      placeholder="Enter model of the car"
+                      name="model"
+                      ref={register({ required: true })}
+                      onChange={(event) => {
+                        props.setCar({
+                          ...props.car,
+                          Model: event.target.value,
+                        });
+                      }}
                     />
-                    {/* {errors.lastName && ( */}
-                    <div className="validation">Please choose a username.</div>
-                    {/* )} */}
-                  </div>
-
-                  <div className="form-group popup">
-                    <label>Email address: </label>
-                    <input
-                      type="text"
-                      //   defaultValue={props.selectedEditUser?.email}
-                      className="form-control"
-                      placeholder="Enter your email"
-                      name="email"
-                      //   ref={register({ required: true })}
-                      //   onChange={(event) => {
-                      // props.setSelectedEditUser({
-                      //   ...props.selectedEditUser,
-                      //   email: event.target.value,
-                      // });
-                      //   }}
-                    />
-
-                    {/* {errors.email && ( */}
-                    <div className="validation">Please choose a username.</div>
-                    {/* )} */}
-                  </div>
-
-                  <div className="form-group popup">
-                    <label>Phone: </label>
-                    <input
-                      type="number"
-                      //   defaultValue={props.selectedEditUser?.phone}
-                      className="form-control"
-                      placeholder="Enter your phone"
-                      name="phone"
-                      //   ref={register({
-                      // required: true,
-                      // minLength: 9,
-                      // maxLength: 9,
-                      //   })}
-                      //   onChange={(event) => {
-                      // props.setSelectedEditUser({
-                      //   ...props.selectedEditUser,
-                      //   phone: event.target.value,
-                      // });
-                      //   }}
-                    />
-
-                    {/* {errors.phone && ( */}
-                    <div className="validation">Please choose a username.</div>
-                    {/* )} */}
+                    {errors.model && (
+                      <div className="validation">
+                        Please choose a username.
+                      </div>
+                    )}
                   </div>
 
                   <div className="buttonOfModal">
@@ -126,13 +118,13 @@ function Popup() {
                       type="button"
                       className="btn btn-secondary closeButton"
                       data-bs-dismiss="modal"
-                      //   onClick={() => setmodalIsOpen(false)}
+                      onClick={() => closeButton()}
                     >
                       Close
                     </button>
                     <button
                       className="btn btn-primary saveButton"
-                      //   onClick={() => addOrUpdateUser()}
+                      onClick={() => addOrUpdateCar()}
                       type="submit"
                     >
                       Save

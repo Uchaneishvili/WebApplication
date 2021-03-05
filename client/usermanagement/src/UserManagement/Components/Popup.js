@@ -5,8 +5,6 @@ import Modal from "react-modal";
 import "./Popup.css";
 function Popup(props) {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
-  const [userList, setuserList] = useState([]);
-  const [userDataForTable, setUserDataForTable] = useState();
   const { register, handleSubmit, errors } = useForm();
 
   console.log(props);
@@ -26,15 +24,6 @@ function Popup(props) {
     console.log("modal");
   }, [props.modalIsOpen]);
 
-  const loadData = async () => {
-    await Axios.get("http://localhost:3001/read")
-      .then((response) => {
-        setuserList(response.data);
-      })
-      .then((receivedData) => setUserDataForTable(receivedData))
-      .catch((err) => console.error(err));
-  };
-
   const addOrUpdateUser = async () => {
     if (props.selectedEditUser && props.selectedEditUser._id) {
       await Axios.put("http://localhost:3001/update", {
@@ -52,7 +41,8 @@ function Popup(props) {
         phone: props.selectedEditUser.phone,
       });
     }
-    loadData();
+    props.loadData();
+
     console.log("data");
   };
 

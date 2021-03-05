@@ -1,6 +1,6 @@
 import "./UserTable.css";
 import Axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Popup from "./Popup.js";
 import Pagination from "./Pagination";
 import Search from "./Search";
@@ -59,60 +59,57 @@ function UserTable() {
         </div>
         <Search loadData={loadData} />
       </div>
-      <div className="userListContainer">
-        <div className="mapData">
-          <table className="table">
-            <thead>
-              <tr>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Action</th>
+      <table className="table">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {userList.map((val) => {
+            return (
+              <tr key={val._id}>
+                <td scope="col" className="firstNameTable" id="FirstName">
+                  {val.firstName}
+                </td>
+                <td scope="col" className="lastNameTable" id="LastName">
+                  {val.lastName}
+                </td>
+                <td scope="col" className="emailTable" id="Email">
+                  {val.email}
+                </td>
+                <td scope="col" className="phoneTable" id="Phone">
+                  {val.phone}
+                </td>
+                <td scope="col" className="buttonsContainer" id="Action">
+                  <button
+                    className="btn btn-danger deteleTableButton"
+                    onClick={() => deleteUser(val._id)}
+                  >
+                    delete
+                  </button>
+                  <button
+                    className="btn btn-success updateTableButton"
+                    onClick={() => editUser(val)}
+                  >
+                    Update
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {userList.map((val) => {
-                return (
-                  <tr key={val._id}>
-                    <td scope="col" className="firstNameTable" id="FirstName">
-                      {val.firstName}
-                    </td>
-                    <td scope="col" className="lastNameTable" id="LastName">
-                      {val.lastName}
-                    </td>
-                    <td scope="col" className="emailTable" id="Email">
-                      {val.email}
-                    </td>
-                    <td scope="col" className="phoneTable" id="Phone">
-                      {val.phone}
-                    </td>
-                    <td scope="col" className="buttonsContainer" id="Action">
-                      <button
-                        className="btn btn-danger deteleTableButton"
-                        onClick={() => deleteUser(val._id)}
-                      >
-                        delete
-                      </button>
-                      <button
-                        className="btn btn-success updateTableButton"
-                        onClick={() => editUser(val)}
-                      >
-                        Update
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
+            );
+          })}
+        </tbody>
+      </table>
       <Popup
         setSelectedEditUser={setSelectedEditUser}
         selectedEditUser={selectedEditUser}
         modalIsOpen={modalIsOpen}
         closePopup={closePopup}
+        loadData={loadData}
       />
       <Pagination loadData={loadData} totalPages={pages} />
     </div>
