@@ -12,15 +12,17 @@ function Popup(props) {
       props.selectedEditUser.firstName &&
       props.selectedEditUser.lastName &&
       props.selectedEditUser.phone &&
-      props.selectedEditUser.email
+      props.selectedEditUser.email &&
+      props.selectedEditUser.phone.minLength == 9 &&
+      props.selectedEditUser.phone.maxLength == 9
     ) {
-      setmodalIsOpen(false);
+      props.loadData();
+      props.closePopup();
     }
   };
 
   useEffect(() => {
     setmodalIsOpen(props.modalIsOpen);
-    console.log("modal");
   }, [props.modalIsOpen]);
 
   const addOrUpdateUser = async () => {
@@ -40,9 +42,7 @@ function Popup(props) {
         phone: props.selectedEditUser.phone,
       });
     }
-    props.loadData();
-
-    console.log("data");
+    onSubmit();
   };
 
   return (
@@ -64,14 +64,14 @@ function Popup(props) {
                 type="button"
                 className="btn-close"
                 data-bs-dismiss="modal"
-                onClick={() => props.closePopup}
+                onClick={() => props.closePopup()}
               >
                 X
               </button>
             </div>
 
             <div>
-              <form className="popupForm" onSubmit={handleSubmit(onSubmit)}>
+              <form className="popupForm" onSubmit={handleSubmit()}>
                 <div className="form-group popup">
                   <label>First Name: </label>
                   <input
@@ -168,7 +168,7 @@ function Popup(props) {
                     type="button"
                     className="btn btn-secondary closeButton"
                     data-bs-dismiss="modal"
-                    onClick={() => setmodalIsOpen(false)}
+                    onClick={() => props.closePopup()}
                   >
                     Close
                   </button>

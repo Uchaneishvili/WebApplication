@@ -24,6 +24,7 @@ function Search(props) {
           type="text"
           className="form-control SearchInput"
           placeholder="Search..."
+          value={search}
           onChange={searchInput}
         />
         <pre>{JSON.stringify(search, null, 2)}</pre>

@@ -15,16 +15,12 @@ function Popup(props) {
 
   const onSubmit = () => {
     if (props.car.Manufacturer && props.car.Model) {
-      setPopupEnable(false);
+      props.loadData();
+      props.closePopup();
     }
   };
 
-  const closeButton = () => {
-    setPopupEnable(false);
-  };
-
   const addOrUpdateCar = async () => {
-    console.log(props.car);
     if (props.car && props.car._id) {
       await axios.put("http://localhost:3001/cars/update", {
         _id: props.car._id,
@@ -37,8 +33,7 @@ function Popup(props) {
         model: props.car.model,
       });
     }
-    props.loadData();
-    setPopupEnable(false);
+    onSubmit();
   };
 
   return (
@@ -61,14 +56,14 @@ function Popup(props) {
                   type="button"
                   className="btn-close"
                   data-bs-dismiss="modal"
-                  onClick={() => closeButton()}
+                  onClick={() => props.closePopup()}
                 >
                   X
                 </button>
               </div>
 
               <div>
-                <form className="popupForm" onSubmit={handleSubmit(onSubmit)}>
+                <form className="popupForm" onSubmit={handleSubmit()}>
                   <div className="form-group popup">
                     <label>Manufacturer </label>
                     <input
@@ -120,7 +115,7 @@ function Popup(props) {
                       type="button"
                       className="btn btn-secondary closeButton"
                       data-bs-dismiss="modal"
-                      onClick={() => closeButton()}
+                      onClick={() => props.closePopup()}
                     >
                       Close
                     </button>

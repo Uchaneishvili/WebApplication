@@ -30,7 +30,7 @@ function Pagination(props) {
         <li className="page-item current" key={`page-${i}`}>
           <a
             onClick={() => onClickButton(i)}
-            className={`page-link ${clickState === "true" ? "is-active" : ""}`}
+            className={`page-link ${i === page ? "is-active" : ""}`}
           >
             {i}
           </a>

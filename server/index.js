@@ -138,12 +138,11 @@ app.put("/cars/update", async (req, res) => {
   console.log(req.body);
 
   try {
-    await carsModel.findById(_id, (updateCar) => {
-      updateCar.manufacturer = manufacturer;
-      updateCar.model = model;
-      updateCar.save();
-      res.send("update");
-    });
+    const updateCar = await carsModel.findById(_id);
+    updateCar.manufacturer = manufacturer;
+    updateCar.model = model;
+    updateCar.save();
+    res.send("update");
   } catch (err) {
     console.log(err);
   }
@@ -154,14 +153,14 @@ app.put("/update", async (request, res) => {
   const { firstName, lastName, phone, email, _id } = request.body;
 
   try {
-    await userModel.findById(_id, (updateUser) => {
-      updateUser.firstName = firstName;
-      updateUser.lastName = lastName;
-      updateUser.email = email;
-      updateUser.phone = phone;
-      updateUser.save();
-      res.send("Update");
-    });
+    const updateUser = await userModel.findById(_id);
+    updateUser.firstName = firstName;
+    updateUser.lastName = lastName;
+    updateUser.email = email;
+    updateUser.phone = phone;
+    updateUser.save();
+
+    res.send("Update");
   } catch (error) {
     console.log(error);
   }

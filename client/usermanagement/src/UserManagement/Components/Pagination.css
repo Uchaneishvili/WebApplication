@@ -5,8 +5,9 @@
 
 .page-link {
   cursor: pointer;
+  color: #212529 !important;
 }
 
-.page-link:is-active {
-  background-color: lawngreen;
+.is-active {
+  background-color: #f3eeee !important;
 }

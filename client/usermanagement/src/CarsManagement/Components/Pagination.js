@@ -20,9 +20,12 @@ function Pagination(props) {
     for (let i = 1; i <= pagenum; i++) {
       p.push(
         <li className="page-item current" key={`page-${i}`}>
-          <button className="page-link" onClick={() => setPage(i)}>
+          <a
+            className={`page-link ${i === page ? "is-active" : ""}`}
+            onClick={() => setPage(i)}
+          >
             {i}
-          </button>
+          </a>
         </li>
       );
     }
@@ -34,25 +37,25 @@ function Pagination(props) {
         <div aria-label="Page navigation example">
           <ul className="pagination">
             <li className="page-item">
-              <button
+              <a
                 className="page-link"
                 aria-label="Previous"
                 onClick={previousPage}
                 disabled={page == 1}
               >
                 <span>&laquo;</span>
-              </button>
+              </a>
             </li>
             {generatePages(props.totalPages)}
             <li className="page-item">
-              <button
+              <a
                 className="page-link"
                 aria-label="Next"
                 onClick={nextPage}
                 disabled={page == props.totalPages}
               >
                 <span>&raquo;</span>
-              </button>
+              </a>
             </li>
           </ul>
         </div>

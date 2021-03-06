@@ -38,6 +38,10 @@ function CarsTable() {
     loadData();
   };
 
+  const closePopup = () => {
+    setModal(false);
+  };
+
   return (
     <div className="container">
       <pre>{JSON.stringify(car, null, 2)}</pre>
@@ -95,7 +99,13 @@ function CarsTable() {
           })}
       </table>
       <Pagination totalPages={pages} loadData={loadData} />
-      <Popup modal={modal} car={car} loadData={loadData} setCar={setCar} />
+      <Popup
+        modal={modal}
+        car={car}
+        loadData={loadData}
+        closePopup={closePopup}
+        setCar={setCar}
+      />
     </div>
   );
 }
