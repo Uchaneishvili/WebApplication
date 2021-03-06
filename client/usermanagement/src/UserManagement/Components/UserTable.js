@@ -2,6 +2,7 @@ import "./UserTable.css";
 import Axios from "axios";
 import React, { useState } from "react";
 import Popup from "./Popup.js";
+// import { useSortBy, useTable } from "react-table";
 import Pagination from "./Pagination";
 import Search from "./Search";
 
@@ -10,6 +11,11 @@ function UserTable() {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const [selectedEditUser, setSelectedEditUser] = useState();
   const [pages, setPages] = useState();
+
+  // const { getTableProps, getTableBodyProps } = useTable(
+  // { columns, data },
+  // useSortBy
+  // );
 
   const editClick = () => {
     setSelectedEditUser({});

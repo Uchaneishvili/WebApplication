@@ -4,12 +4,9 @@
 }
 
 .page-link {
-  background-color: yellow !important;
+  cursor: pointer;
 }
 
-.body .page-link {
-  background-color: yellow !important;
-}
-.a .page-link {
-  background-color: teal;
+.page-link:is-active {
+  background-color: lawngreen;
 }

@@ -24,19 +24,21 @@ function Popup(props) {
   };
 
   const addOrUpdateCar = async () => {
+    console.log(props.car);
     if (props.car && props.car._id) {
       await axios.put("http://localhost:3001/cars/update", {
         _id: props.car._id,
-        manufacturer: props.car.Manufacturer,
-        model: props.car.Model,
+        manufacturer: props.car.manufacturer,
+        model: props.car.model,
       });
     } else {
       await axios.post("http://localhost:3001/cars/insert", {
-        manufacturer: props.car.Manufacturer,
-        model: props.car.Model,
+        manufacturer: props.car.manufacturer,
+        model: props.car.model,
       });
     }
     props.loadData();
+    setPopupEnable(false);
   };
 
   return (
@@ -71,7 +73,7 @@ function Popup(props) {
                     <label>Manufacturer </label>
                     <input
                       type="text"
-                      defaultValue={props.car?.Manufacturer}
+                      defaultValue={props.car?.manufacturer}
                       className="form-control manufacturer"
                       placeholder="Enter manufacturer of the car"
                       name="manufacturer"
@@ -79,7 +81,7 @@ function Popup(props) {
                       onChange={(event) => {
                         props.setCar({
                           ...props.car,
-                          Manufacturer: event.target.value,
+                          manufacturer: event.target.value,
                         });
                       }}
                     />
@@ -94,7 +96,7 @@ function Popup(props) {
                     <label>Model </label>
                     <input
                       type="text"
-                      defaultValue={props.car?.Model}
+                      defaultValue={props.car?.model}
                       className="form-control"
                       placeholder="Enter model of the car"
                       name="model"
@@ -102,13 +104,13 @@ function Popup(props) {
                       onChange={(event) => {
                         props.setCar({
                           ...props.car,
-                          Model: event.target.value,
+                          model: event.target.value,
                         });
                       }}
                     />
                     {errors.model && (
                       <div className="validation">
-                        Please choose a username.
+                        Please choose a model of the car.
                       </div>
                     )}
                   </div>

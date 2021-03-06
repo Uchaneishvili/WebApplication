@@ -56,9 +56,11 @@ app.post("/cars/insert", async (req, res) => {
 app.get("/cars/read", async (req, res) => {
   try {
     let q = {};
+
     if (req.query.search) {
       q.manufacturer = req.query.search;
     }
+
     let query = carsModel.find(q);
 
     const page = parseInt(req.query.page) || 1;
@@ -69,6 +71,7 @@ app.get("/cars/read", async (req, res) => {
     const pages = Math.ceil(total / pageSize);
 
     query = query.skip(skip).limit(pageSize);
+
     const result = await query;
 
     res.status(200).json({
@@ -123,27 +126,26 @@ app.get("/read", async (req, res) => {
   }
 });
 
-app.delete("/cars/delete:id", async (req, res) => {
+app.delete("/cars/delete/:id", async (req, res) => {
   const id = req.params.id;
 
   await carsModel.findByIdAndRemove(id).exec();
   res.send("deleted");
 });
 
-app.put("cars/update", async (req, res) => {
-  const { Manufacturer, Model, _id } = req.body;
+app.put("/cars/update", async (req, res) => {
+  const { manufacturer, model, _id } = req.body;
   console.log(req.body);
-  console.log(carsModel);
 
   try {
     await carsModel.findById(_id, (updateCar) => {
-      updateCar.manufacturer = Manufacturer;
-      updateCar.model = Model;
+      updateCar.manufacturer = manufacturer;
+      updateCar.model = model;
       updateCar.save();
       res.send("update");
     });
   } catch (err) {
-    console.oog(err);
+    console.log(err);
   }
 });
 

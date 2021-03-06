@@ -70,10 +70,10 @@ function CarsTable() {
               <tbody key={val._id}>
                 <tr>
                   <td scope="col" className="manufacturer" id="Manufacturer">
-                    {val.manufacturer} {val.Manufacturer}
+                    {val.manufacturer}
                   </td>
                   <td scope="col" className="model" id="Manufacturer">
-                    {val.model} {val.Model}
+                    {val.model}
                   </td>
                   <td scope="col" className="buttonsContainer" id="Action">
                     <button

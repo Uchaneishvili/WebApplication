@@ -6,7 +6,8 @@
   align-self: auto;
 }
 
-.SearchButton {
+.SearchButton,
+.ClearButton {
   width: 100px !important;
 }
 

@@ -7,7 +7,6 @@ function Popup(props) {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const { register, handleSubmit, errors } = useForm();
 
-  console.log(props);
   const onSubmit = () => {
     if (
       props.selectedEditUser.firstName &&
