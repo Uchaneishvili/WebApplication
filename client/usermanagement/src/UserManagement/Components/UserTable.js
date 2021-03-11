@@ -13,6 +13,7 @@ function UserTable() {
   const [selectedEditUser, setSelectedEditUser] = useState();
   const [pages, setPages] = useState();
   const [confirmModalIsOpen, setConfirmModalIsOpen] = useState(false);
+  const [userIdToDelete, setUserIdToDelete] = useState();
 
   // const { getTableProps, getTableBodyProps } = useTable(
   // { columns, data },
@@ -29,7 +30,8 @@ function UserTable() {
     setmodalIsOpen(true);
   }
 
-  function deleteUserPopup() {
+  function deleteUserPopup(id) {
+    setUserIdToDelete(id);
     setConfirmModalIsOpen(true);
   }
 
@@ -53,11 +55,22 @@ function UserTable() {
     setConfirmModalIsOpen(false);
   };
 
+  const deleteUser = async (id) => {
+    await Axios.delete(`http://localhost:3001/delete/${id}`);
+    loadData();
+    console.log("test");
+    setConfirmModalIsOpen(false);
+  };
+
   // const deleteUser = async (id) => {
   //   await Axios.delete(`http://localhost:3001/delete/${id}`);
   //   loadData();
   //   console.log("test");
   // };
+
+  const test = () => {
+    console.log("test");
+  };
 
   return (
     <div className="container">
@@ -80,35 +93,15 @@ function UserTable() {
       <table className="table">
         <thead>
           <tr>
-            <th>
-              <button className="btn btn-light custom-button tableHeader">
-                First Name
-              </button>
-            </th>
+            <th onClick={test()}>First Name</th>
 
-            <th>
-              <button className="btn btn-light custom-button tableHeader">
-                Last Name
-              </button>
-            </th>
+            <th>Last Name</th>
 
-            <th>
-              <button className="btn btn-light custom-button tableHeader">
-                Email
-              </button>
-            </th>
+            <th>Email</th>
 
-            <th>
-              <button className="btn btn-light custom-button tableHeader">
-                Phone
-              </button>
-            </th>
+            <th>Phone</th>
 
-            <th>
-              <button className="btn btn-light custom-button tableHeader">
-                Action
-              </button>
-            </th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -130,7 +123,7 @@ function UserTable() {
                 <td scope="col" className="buttonsContainer" id="Action">
                   <button
                     className="btn btn-danger deleteTableButton"
-                    onClick={() => deleteUserPopup()}
+                    onClick={() => deleteUserPopup(val._id)}
                   >
                     delete
                   </button>
@@ -158,6 +151,8 @@ function UserTable() {
       <PopupConfirm
         confirmModalIsOpen={confirmModalIsOpen}
         closeConfirmPopup={closeConfirmPopup}
+        deleteUser={deleteUser}
+        userIdToDelete={userIdToDelete}
       />
     </div>
   );

@@ -101,16 +101,6 @@ app.get("/read", async (req, res) => {
       q.firstName = req.query.search;
     }
 
-    // } else if (
-    //   ((await userModel.find({ firstName: req.query.search })).length = 0)
-    // ) {
-    //   console.log("else if");
-    //   console.log(
-    //     (await userModel.find({ firstName: req.query.search })).length
-    //   );
-    //   q.lastName = req.query.search;
-    // }
-
     console.log(q);
 
     let query = userModel.find(q).sort("firstName");

@@ -1,30 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Modal from "react-modal";
-import Axios from "axios";
 
 function PopupConfirm(props) {
-  const [popupIsOpen, setPopupIsOpen] = useState(false);
-
-  const deleteUser = async (id) => {
-    await Axios.delete(`http://localhost:3001/delete/${id}`);
-    props.loadData();
-    console.log("test");
-  };
-
-  useEffect(() => {
-    setPopupIsOpen(props.confirmModalIsOpen);
-  }, [props.confirmModalIsOpen]);
-
   return (
     <div>
-      <Modal className="Modal" ariaHideApp={false} isOpen={popupIsOpen}>
+      <Modal
+        className="Modal"
+        ariaHideApp={false}
+        isOpen={props.confirmModalIsOpen}
+      >
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
               <h4>Are you sure？</h4>
             </div>
             <div className="modal-footer">
-              <button className="btn btn-success" onClick={() => deleteUser()}>
+              <button
+                className="btn btn-success"
+                onClick={() => props.deleteUser(props.userIdToDelete)}
+              >
                 Yes
               </button>
               <button
