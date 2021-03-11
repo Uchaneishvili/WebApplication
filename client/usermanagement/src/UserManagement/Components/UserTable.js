@@ -62,12 +62,6 @@ function UserTable() {
     setConfirmModalIsOpen(false);
   };
 
-  // const deleteUser = async (id) => {
-  //   await Axios.delete(`http://localhost:3001/delete/${id}`);
-  //   loadData();
-  //   console.log("test");
-  // };
-
   const test = () => {
     console.log("test");
   };

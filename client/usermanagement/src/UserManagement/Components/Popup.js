@@ -7,25 +7,29 @@ function Popup(props) {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const { register, handleSubmit, errors } = useForm();
 
-  const onSubmit = () => {
+  const onSubmitInsert = () => {
     if (
-      props.selectedEditUser.firstName &&
-      props.selectedEditUser.lastName &&
-      props.selectedEditUser.phone &&
-      props.selectedEditUser.email &&
-      props.selectedEditUser.phone.minLength == 9 &&
-      props.selectedEditUser.phone.maxLength == 9
+      props.selectedEditUser.firstName != undefined &&
+      props.selectedEditUser.lastName != undefined &&
+      props.selectedEditUser.email != undefined &&
+      props.selectedEditUser.phone != undefined &&
+      props.selectedEditUser.phone.length == 9
     ) {
       props.loadData();
       props.closePopup();
-      console.log(
-        props.selectedEditUser.firstName &&
-          props.selectedEditUser.lastName &&
-          props.selectedEditUser.phone &&
-          props.selectedEditUser.email &&
-          props.selectedEditUser.phone.minLength &&
-          props.selectedEditUser.phone.maxLength
-      );
+    }
+  };
+
+  const onSubmitupdate = () => {
+    if (
+      props.selectedEditUser.firstName != undefined &&
+      props.selectedEditUser.lastName != undefined &&
+      props.selectedEditUser.email != undefined &&
+      props.selectedEditUser.phone != undefined &&
+      props.selectedEditUser.phone.length == undefined
+    ) {
+      props.loadData();
+      props.closePopup();
     }
   };
 
@@ -42,6 +46,7 @@ function Popup(props) {
         email: props.selectedEditUser.email,
         phone: props.selectedEditUser.phone,
       });
+      onSubmitupdate();
     } else {
       await Axios.post("http://localhost:3001/insert", {
         firstName: props.selectedEditUser.firstName,
@@ -49,8 +54,8 @@ function Popup(props) {
         email: props.selectedEditUser.email,
         phone: props.selectedEditUser.phone,
       });
+      onSubmitInsert();
     }
-    onSubmit();
   };
 
   return (
@@ -79,7 +84,10 @@ function Popup(props) {
             </div>
 
             <div>
-              <form className="popupForm" onSubmit={handleSubmit(onSubmit)}>
+              <form
+                className="popupForm"
+                onSubmit={handleSubmit(onSubmitInsert)}
+              >
                 <div className="form-group popup">
                   <label>First Name: </label>
                   <input
