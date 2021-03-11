@@ -94,10 +94,26 @@ app.get("/cars/read", async (req, res) => {
 app.get("/read", async (req, res) => {
   try {
     let q = {};
+
     if (req.query.search) {
+      console.log("if");
+
       q.firstName = req.query.search;
     }
-    let query = userModel.find(q);
+
+    // } else if (
+    //   ((await userModel.find({ firstName: req.query.search })).length = 0)
+    // ) {
+    //   console.log("else if");
+    //   console.log(
+    //     (await userModel.find({ firstName: req.query.search })).length
+    //   );
+    //   q.lastName = req.query.search;
+    // }
+
+    console.log(q);
+
+    let query = userModel.find(q).sort("firstName");
 
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;

@@ -5,12 +5,14 @@ import Popup from "./Popup.js";
 // import { useSortBy, useTable } from "react-table";
 import Pagination from "./Pagination";
 import Search from "./Search";
+import PopupConfirm from "../../PopupConfirm";
 
 function UserTable() {
   const [userList, setuserList] = useState([]);
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const [selectedEditUser, setSelectedEditUser] = useState();
   const [pages, setPages] = useState();
+  const [confirmModalIsOpen, setConfirmModalIsOpen] = useState(false);
 
   // const { getTableProps, getTableBodyProps } = useTable(
   // { columns, data },
@@ -27,6 +29,10 @@ function UserTable() {
     setmodalIsOpen(true);
   }
 
+  function deleteUserPopup() {
+    setConfirmModalIsOpen(true);
+  }
+
   const loadData = async (page, search) => {
     let url = `http://localhost:3001/read?page=${page}`;
     if (search) {
@@ -39,19 +45,25 @@ function UserTable() {
     });
   };
 
-  const deleteUser = async (id) => {
-    await Axios.delete(`http://localhost:3001/delete/${id}`);
-    loadData();
-  };
-
   const closePopup = () => {
     setmodalIsOpen(false);
   };
 
+  const closeConfirmPopup = () => {
+    setConfirmModalIsOpen(false);
+  };
+
+  // const deleteUser = async (id) => {
+  //   await Axios.delete(`http://localhost:3001/delete/${id}`);
+  //   loadData();
+  //   console.log("test");
+  // };
+
   return (
     <div className="container">
       <pre>{JSON.stringify(selectedEditUser, null, 2)}</pre>
-      <pre>{JSON.stringify(modalIsOpen, null, 2)}</pre>
+      <pre>{JSON.stringify(confirmModalIsOpen, null, 2)}</pre>
+      <pre>{JSON.stringify(pages, null, 2)} </pre>
 
       <div className="SearchAndAddUserContainer">
         <div className="centerButtonContainer">
@@ -68,11 +80,35 @@ function UserTable() {
       <table className="table">
         <thead>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Action</th>
+            <th>
+              <button className="btn btn-light custom-button tableHeader">
+                First Name
+              </button>
+            </th>
+
+            <th>
+              <button className="btn btn-light custom-button tableHeader">
+                Last Name
+              </button>
+            </th>
+
+            <th>
+              <button className="btn btn-light custom-button tableHeader">
+                Email
+              </button>
+            </th>
+
+            <th>
+              <button className="btn btn-light custom-button tableHeader">
+                Phone
+              </button>
+            </th>
+
+            <th>
+              <button className="btn btn-light custom-button tableHeader">
+                Action
+              </button>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -93,11 +129,12 @@ function UserTable() {
                 </td>
                 <td scope="col" className="buttonsContainer" id="Action">
                   <button
-                    className="btn btn-danger deteleTableButton"
-                    onClick={() => deleteUser(val._id)}
+                    className="btn btn-danger deleteTableButton"
+                    onClick={() => deleteUserPopup()}
                   >
                     delete
                   </button>
+
                   <button
                     className="btn btn-success updateTableButton"
                     onClick={() => editUser(val)}
@@ -118,6 +155,10 @@ function UserTable() {
         loadData={loadData}
       />
       <Pagination loadData={loadData} totalPages={pages} />
+      <PopupConfirm
+        confirmModalIsOpen={confirmModalIsOpen}
+        closeConfirmPopup={closeConfirmPopup}
+      />
     </div>
   );
 }

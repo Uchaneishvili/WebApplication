@@ -18,6 +18,14 @@ function Popup(props) {
     ) {
       props.loadData();
       props.closePopup();
+      console.log(
+        props.selectedEditUser.firstName &&
+          props.selectedEditUser.lastName &&
+          props.selectedEditUser.phone &&
+          props.selectedEditUser.email &&
+          props.selectedEditUser.phone.minLength &&
+          props.selectedEditUser.phone.maxLength
+      );
     }
   };
 
@@ -71,7 +79,7 @@ function Popup(props) {
             </div>
 
             <div>
-              <form className="popupForm" onSubmit={handleSubmit()}>
+              <form className="popupForm" onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-group popup">
                   <label>First Name: </label>
                   <input
