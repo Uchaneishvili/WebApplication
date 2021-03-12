@@ -6,6 +6,7 @@ import "./Popup.css";
 function Popup(props) {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
   const { register, handleSubmit, errors } = useForm();
+  const [buttonIsDisabled, setButtonIsDisabled] = useState(true);
 
   const onSubmitInsert = () => {
     if (
@@ -15,11 +16,35 @@ function Popup(props) {
       props.selectedEditUser.phone != undefined &&
       props.selectedEditUser.phone.length == 9
     ) {
-      props.loadData(props.pages);
-      console.log(props.loadData(props.pages));
-
+      props.loadData(1);
       props.closePopup();
     }
+  };
+
+  const onSubmit = () => {
+    if (
+      props.selectedEditUser.firstName &&
+      props.selectedEditUser.lastName &&
+      props.selectedEditUser.email &&
+      props.selectedEditUser.phone &&
+      props.selectedEditUser.phone.length == 9
+    ) {
+      props.loadData();
+      props.closePopup();
+      setButtonIsDisabled(false);
+    } else if (
+      props.selectedEditUser.firstName != undefined &&
+      props.selectedEditUser.lastName != undefined &&
+      props.selectedEditUser.email != undefined &&
+      props.selectedEditUser.phone != undefined &&
+      props.selectedEditUser.phone.length == undefined
+    ) {
+      props.loadData();
+      props.closePopup();
+      setButtonIsDisabled(false);
+    }
+
+    return <h1>test</h1>;
   };
 
   const onSubmitupdate = () => {
@@ -49,6 +74,7 @@ function Popup(props) {
         phone: props.selectedEditUser.phone,
       });
       onSubmitupdate();
+      setButtonIsDisabled(true);
     } else {
       await Axios.post("http://localhost:3001/insert", {
         firstName: props.selectedEditUser.firstName,
@@ -57,7 +83,40 @@ function Popup(props) {
         phone: props.selectedEditUser.phone,
       });
       onSubmitInsert();
+      setButtonIsDisabled(true);
     }
+  };
+
+  const lastNameFunction = (event) => {
+    props.setSelectedEditUser({
+      ...props.selectedEditUser,
+      lastName: event.target.value,
+    });
+    setButtonIsDisabled(false);
+  };
+
+  const firstNameFunction = (event) => {
+    props.setSelectedEditUser({
+      ...props.selectedEditUser,
+      firstName: event.target.value,
+    });
+    setButtonIsDisabled(false);
+  };
+
+  const emailFunction = (event) => {
+    props.setSelectedEditUser({
+      ...props.selectedEditUser,
+      email: event.target.value,
+    });
+    setButtonIsDisabled(false);
+  };
+
+  const phoneFunction = (event) => {
+    props.setSelectedEditUser({
+      ...props.selectedEditUser,
+      phone: event.target.value,
+    });
+    setButtonIsDisabled(false);
   };
 
   return (
@@ -86,10 +145,7 @@ function Popup(props) {
             </div>
 
             <div>
-              <form
-                className="popupForm"
-                onSubmit={handleSubmit(onSubmitInsert)}
-              >
+              <form className="popupForm" onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-group popup">
                   <label>First Name: </label>
                   <input
@@ -101,10 +157,7 @@ function Popup(props) {
                     name="firstName"
                     ref={register({ required: true })}
                     onChange={(event) => {
-                      props.setSelectedEditUser({
-                        ...props.selectedEditUser,
-                        firstName: event.target.value,
-                      });
+                      firstNameFunction(event);
                     }}
                   />
                   {errors.firstName && (
@@ -122,10 +175,7 @@ function Popup(props) {
                     name="lastName"
                     ref={register({ required: true })}
                     onChange={(event) => {
-                      props.setSelectedEditUser({
-                        ...props.selectedEditUser,
-                        lastName: event.target.value,
-                      });
+                      lastNameFunction(event);
                     }}
                   />
                   {errors.lastName && (
@@ -143,10 +193,7 @@ function Popup(props) {
                     name="email"
                     ref={register({ required: true })}
                     onChange={(event) => {
-                      props.setSelectedEditUser({
-                        ...props.selectedEditUser,
-                        email: event.target.value,
-                      });
+                      emailFunction(event);
                     }}
                   />
 
@@ -169,10 +216,7 @@ function Popup(props) {
                       maxLength: 9,
                     })}
                     onChange={(event) => {
-                      props.setSelectedEditUser({
-                        ...props.selectedEditUser,
-                        phone: event.target.value,
-                      });
+                      phoneFunction(event);
                     }}
                   />
 
@@ -192,6 +236,7 @@ function Popup(props) {
                   </button>
                   <button
                     className="btn btn-primary saveButton"
+                    disabled={buttonIsDisabled}
                     onClick={() => addOrUpdateUser()}
                     type="submit"
                   >
