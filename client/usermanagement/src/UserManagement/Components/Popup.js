@@ -15,7 +15,9 @@ function Popup(props) {
       props.selectedEditUser.phone != undefined &&
       props.selectedEditUser.phone.length == 9
     ) {
-      props.loadData();
+      props.loadData(props.pages);
+      console.log(props.loadData(props.pages));
+
       props.closePopup();
     }
   };
@@ -28,7 +30,7 @@ function Popup(props) {
       props.selectedEditUser.phone != undefined &&
       props.selectedEditUser.phone.length == undefined
     ) {
-      props.loadData();
+      props.loadData(props.pages);
       props.closePopup();
     }
   };

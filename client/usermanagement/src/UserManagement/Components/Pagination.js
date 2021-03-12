@@ -25,6 +25,7 @@ function Pagination(props) {
 
   function generatePages(pagenum) {
     const pages = [];
+
     for (let i = 1; i <= pagenum; i++) {
       pages.push(
         <li className="page-item current" key={`page-${i}`}>

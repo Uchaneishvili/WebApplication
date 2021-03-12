@@ -4,6 +4,8 @@ const app = express();
 const cors = require("cors");
 const userModel = require("./models/User");
 const carsModel = require("./models/Cars");
+// const Sequelize = require("sequilize");
+// const Op = Sequelize.Op;
 
 app.use(express.json());
 app.use(cors());
@@ -91,24 +93,52 @@ app.get("/cars/read", async (req, res) => {
   }
 });
 
+// app.get("/search", (req, res) => {
+// const { term } = req.query;
+
+// res.status(200).json({
+// data: searchResult,
+// });
+// });
+
+app.get("/search", (req, res) => {
+  if (req.query.firstName) {
+    const searchField = req.query.firstName;
+    userModel
+      .find({
+        firstName: { $regex: searchField, $options: "$i" },
+      })
+      .then((data) => {
+        res.send(data);
+      });
+  } else if (req.query.lastName) {
+    const searchField = req.query.lastName;
+    userModel
+      .find({
+        lastName: { $regex: searchField, $options: "$i" },
+      })
+      .then((data) => {
+        res.send(data);
+      });
+  }
+});
+
 app.get("/read", async (req, res) => {
   try {
-    let q = {};
+    // if (req.query.search) {
+    //   console.log("if");
+    //   q.firstName = req.query.search;
+    // }
 
-    if (req.query.search) {
-      console.log("if");
-
-      q.firstName = req.query.search;
-    }
-
-    console.log(q);
-
-    let query = userModel.find(q).sort("firstName");
+    let query = userModel.find().sort("firstName");
+    // let regex = /giga/gi;
+    // let rsult = query.match(regex);
+    // console.log(rsult);
 
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
     const skip = (page - 1) * pageSize;
-    const total = await userModel.countDocuments(q);
+    const total = await userModel.countDocuments();
 
     const pages = Math.ceil(total / pageSize);
 

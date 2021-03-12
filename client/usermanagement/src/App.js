@@ -1,8 +1,5 @@
 import "./App.css";
 import React from "react";
-import UserTable from "./UserManagement/Components/UserTable.js";
-import Popup from "./UserManagement/Components/Popup.js";
-import Pagination from "./UserManagement/Components/Pagination";
 import Navigation from "./UserManagement/Components/Navigation";
 import UserManagement from "./UserManagement/UserManagement";
 import CarsManagement from "./CarsManagement/CarsManagement";

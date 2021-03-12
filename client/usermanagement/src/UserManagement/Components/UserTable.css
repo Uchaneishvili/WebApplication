@@ -15,6 +15,15 @@ tr {
   border-color: #f3eeee !important;
 }
 
+.ascPhoto {
+  cursor: pointer;
+  width: 18px;
+}
+.defaultSorting {
+  cursor: pointer;
+  width: 18px;
+}
+
 thead {
   background-color: #f3eeee !important;
 }

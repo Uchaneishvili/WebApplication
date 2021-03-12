@@ -12,7 +12,7 @@ function Search(props) {
   };
 
   const searchInput = (event) => {
-    if (defaultValue == "true") {
+    if (defaultValue) {
       setSearch([]);
     } else {
       setSearch(event.target.value);

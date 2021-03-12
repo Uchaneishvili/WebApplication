@@ -2,7 +2,6 @@ import "./UserTable.css";
 import Axios from "axios";
 import React, { useState } from "react";
 import Popup from "./Popup.js";
-// import { useSortBy, useTable } from "react-table";
 import Pagination from "./Pagination";
 import Search from "./Search";
 import PopupConfirm from "../../PopupConfirm";
@@ -14,12 +13,9 @@ function UserTable() {
   const [pages, setPages] = useState();
   const [confirmModalIsOpen, setConfirmModalIsOpen] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState();
+  const [sortingIcon, setSortingIcon] = useState();
 
-  // const { getTableProps, getTableBodyProps } = useTable(
-  // { columns, data },
-  // useSortBy
-  // );
-
+  let i = 0;
   const editClick = () => {
     setSelectedEditUser({});
     setmodalIsOpen(true);
@@ -38,12 +34,13 @@ function UserTable() {
   const loadData = async (page, search) => {
     let url = `http://localhost:3001/read?page=${page}`;
     if (search) {
-      url += `&search=${search}`;
+      url += `&search=${search}`; // http://localhost:3001/search=${search}?page=${page}
     }
 
     await Axios.get(url).then((response) => {
       setuserList(response.data.data);
       setPages(response.data.pages);
+      console.log(response);
     });
   };
 
@@ -57,13 +54,14 @@ function UserTable() {
 
   const deleteUser = async (id) => {
     await Axios.delete(`http://localhost:3001/delete/${id}`);
-    loadData();
+    loadData(pages);
     console.log("test");
     setConfirmModalIsOpen(false);
   };
 
-  const test = () => {
-    console.log("test");
+  const ascSorting = () => {
+    i = i + 1;
+    console.log(i);
   };
 
   return (
@@ -87,13 +85,104 @@ function UserTable() {
       <table className="table">
         <thead>
           <tr>
-            <th onClick={test()}>First Name</th>
+            <th>
+              First Name{" "}
+              <span onClick={() => ascSorting()}>
+                {
+                  (i = 0 ?? (
+                    <svg
+                      className="defaultSorting"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M4 6h16M4 12h16M4 18h7"
+                      ></path>
+                    </svg>
+                  ))
+                }
 
-            <th>Last Name</th>
+                {/* <svg
+                  className="ascPhoto"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
+                  ></path>
+                </svg> */}
+              </span>
+            </th>
 
-            <th>Email</th>
+            <th>
+              Last Name{" "}
+              <span>
+                <svg
+                  className="ascPhoto"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
+                  ></path>
+                </svg>
+              </span>
+            </th>
 
-            <th>Phone</th>
+            <th>
+              Email{" "}
+              <span>
+                <svg
+                  className="ascPhoto"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
+                  ></path>
+                </svg>
+              </span>
+            </th>
+
+            <th>
+              Phone{" "}
+              <span>
+                <svg
+                  className="ascPhoto"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
+                  ></path>
+                </svg>
+              </span>
+            </th>
 
             <th>Action</th>
           </tr>
@@ -140,6 +229,7 @@ function UserTable() {
         modalIsOpen={modalIsOpen}
         closePopup={closePopup}
         loadData={loadData}
+        pages={pages}
       />
       <Pagination loadData={loadData} totalPages={pages} />
       <PopupConfirm
