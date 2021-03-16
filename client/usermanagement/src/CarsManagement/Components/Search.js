@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 
 function Search(props) {
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState("");
   const [defaultValue, setDefaultValue] = useState(false);
 
   const resetSearch = () => {
     props.loadData(1);
-    setSearch([]);
+    setSearch("");
     setDefaultValue(true);
   };
 
   const searchInput = (event) => {
     if (defaultValue == "true") {
-      setSearch([]);
+      setSearch("");
     } else {
       setSearch(event.target.value);
     }

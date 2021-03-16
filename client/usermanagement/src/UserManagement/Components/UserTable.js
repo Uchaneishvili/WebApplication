@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Popup from "./Popup.js";
 import Pagination from "./Pagination";
 import Search from "./Search";
-import PopupConfirm from "../../PopupConfirm";
+import PopupConfirm from "./PopupConfirm";
 
 function UserTable() {
   const [userList, setuserList] = useState([]);
@@ -13,11 +13,8 @@ function UserTable() {
   const [pages, setPages] = useState();
   const [confirmModalIsOpen, setConfirmModalIsOpen] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState();
-  const [sortDefault, setSortDefault] = useState();
-  const [sortAsc, setSortAsc] = useState(false);
   const [sortObject, setSortObject] = useState({});
 
-  let i = 0;
   const editClick = () => {
     setSelectedEditUser({});
     setmodalIsOpen(true);
@@ -36,7 +33,7 @@ function UserTable() {
   const loadData = async (page, search, sortField, sortDirection) => {
     let url = `http://localhost:3001/read?page=${page}`;
     if (search) {
-      url += `&search=${search}`; // http://localhost:3001/search=${search}?page=${page}
+      url += `&search=${search}`;
     }
 
     if (sortField) {
@@ -61,7 +58,6 @@ function UserTable() {
   const deleteUser = async (id) => {
     await Axios.delete(`http://localhost:3001/delete/${id}`);
     loadData(pages);
-    console.log("test");
     setConfirmModalIsOpen(false);
   };
 
@@ -78,12 +74,6 @@ function UserTable() {
         loadData(1, "");
       }
     }
-
-    // if (sortObject[sortField]) {
-    //   loadData(1, "", sortField, sortObject[sortField]);
-    // } else {
-    //   loadData(1, "");
-    // }
   };
 
   const iconRenderer = (fieldName) => {
@@ -159,7 +149,7 @@ function UserTable() {
         </div>
         <Search loadData={loadData} />
       </div>
-      <table className="table">
+      <table className="table table-hover">
         <thead>
           <tr>
             <th>

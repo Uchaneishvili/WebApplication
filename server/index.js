@@ -57,13 +57,20 @@ app.post("/cars/insert", async (req, res) => {
 
 app.get("/cars/read", async (req, res) => {
   try {
-    let q = {};
+    const { search, sortDirection, sortField } = req.query;
+    const q = {};
 
-    if (req.query.search) {
-      q.manufacturer = req.query.search;
+    if (search) {
+      q["$or"] = [{ manufacturer: search }, { model: search }];
     }
 
-    let query = carsModel.find(q);
+    const sort = {};
+
+    if (sortField) {
+      sort[sortField] = sortDirection === "asc" ? 1 : -1;
+    }
+
+    let query = carsModel.find(q).sort(sort);
 
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
@@ -93,14 +100,6 @@ app.get("/cars/read", async (req, res) => {
   }
 });
 
-// app.get("/search", (req, res) => {
-// const { term } = req.query;
-
-// res.status(200).json({
-// data: searchResult,
-// });
-// });
-
 app.get("/search", (req, res) => {
   if (req.query.firstName) {
     const searchField = req.query.search;
@@ -125,10 +124,6 @@ app.get("/search", (req, res) => {
 
 app.get("/read", async (req, res) => {
   try {
-    // if (req.query.search) {
-    //   console.log("if");
-    //   q.firstName = req.query.search;
-    // }
     const { search, sortDirection, sortField } = req.query;
     const querySearch = {};
     if (search) {
@@ -142,10 +137,6 @@ app.get("/read", async (req, res) => {
     }
 
     let query = userModel.find(querySearch).sort(sort);
-
-    // let regex = /giga/gi;
-    // let rsult = query.match(regex);
-    // console.log(rsult);
 
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
