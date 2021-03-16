@@ -103,7 +103,7 @@ app.get("/cars/read", async (req, res) => {
 
 app.get("/search", (req, res) => {
   if (req.query.firstName) {
-    const searchField = req.query.firstName;
+    const searchField = req.query.search;
     userModel
       .find({
         firstName: { $regex: searchField, $options: "$i" },
@@ -112,7 +112,7 @@ app.get("/search", (req, res) => {
         res.send(data);
       });
   } else if (req.query.lastName) {
-    const searchField = req.query.lastName;
+    const searchField = req.query.search;
     userModel
       .find({
         lastName: { $regex: searchField, $options: "$i" },
@@ -129,8 +129,20 @@ app.get("/read", async (req, res) => {
     //   console.log("if");
     //   q.firstName = req.query.search;
     // }
+    const { search, sortDirection, sortField } = req.query;
+    const querySearch = {};
+    if (search) {
+      querySearch["$or"] = [{ firstName: search }, { lastName: search }];
+    }
 
-    let query = userModel.find().sort("firstName");
+    const sort = {};
+
+    if (sortField) {
+      sort[sortField] = sortDirection === "asc" ? 1 : -1;
+    }
+
+    let query = userModel.find(querySearch).sort(sort);
+
     // let regex = /giga/gi;
     // let rsult = query.match(regex);
     // console.log(rsult);
@@ -138,7 +150,7 @@ app.get("/read", async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
     const skip = (page - 1) * pageSize;
-    const total = await userModel.countDocuments();
+    const total = await userModel.countDocuments(querySearch);
 
     const pages = Math.ceil(total / pageSize);
 

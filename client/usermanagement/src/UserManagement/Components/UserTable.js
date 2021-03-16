@@ -13,7 +13,9 @@ function UserTable() {
   const [pages, setPages] = useState();
   const [confirmModalIsOpen, setConfirmModalIsOpen] = useState(false);
   const [userIdToDelete, setUserIdToDelete] = useState();
-  const [sortingIcon, setSortingIcon] = useState();
+  const [sortDefault, setSortDefault] = useState();
+  const [sortAsc, setSortAsc] = useState(false);
+  const [sortObject, setSortObject] = useState({});
 
   let i = 0;
   const editClick = () => {
@@ -31,10 +33,14 @@ function UserTable() {
     setConfirmModalIsOpen(true);
   }
 
-  const loadData = async (page, search) => {
+  const loadData = async (page, search, sortField, sortDirection) => {
     let url = `http://localhost:3001/read?page=${page}`;
     if (search) {
       url += `&search=${search}`; // http://localhost:3001/search=${search}?page=${page}
+    }
+
+    if (sortField) {
+      url += `&sortField=${sortField}&sortDirection=${sortDirection}`;
     }
 
     await Axios.get(url).then((response) => {
@@ -59,9 +65,80 @@ function UserTable() {
     setConfirmModalIsOpen(false);
   };
 
-  const ascSorting = () => {
-    i = i + 1;
-    console.log(i);
+  const sort = (sortField) => {
+    if (!sortObject[sortField]) {
+      setSortObject({ [sortField]: "asc" });
+      loadData(1, "", sortField, "asc");
+    } else {
+      if (sortObject[sortField] == "asc") {
+        setSortObject({ [sortField]: "desc" });
+        loadData(1, "", sortField, "desc");
+      } else {
+        setSortObject({});
+        loadData(1, "");
+      }
+    }
+
+    // if (sortObject[sortField]) {
+    //   loadData(1, "", sortField, sortObject[sortField]);
+    // } else {
+    //   loadData(1, "");
+    // }
+  };
+
+  const iconRenderer = (fieldName) => {
+    if (sortObject[fieldName] === "asc") {
+      return (
+        <svg
+          className="sortIcon"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
+          ></path>
+        </svg>
+      );
+    } else if (sortObject[fieldName] === "desc") {
+      return (
+        <svg
+          className="sortIcon"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+          ></path>
+        </svg>
+      );
+    } else {
+      return (
+        <svg
+          className="sortIcon"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M4 6h16M4 12h16M4 18h7"
+          ></path>
+        </svg>
+      );
+    }
   };
 
   return (
@@ -87,101 +164,24 @@ function UserTable() {
           <tr>
             <th>
               First Name{" "}
-              <span onClick={() => ascSorting()}>
-                {
-                  (i = 0 ?? (
-                    <svg
-                      className="defaultSorting"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4 6h16M4 12h16M4 18h7"
-                      ></path>
-                    </svg>
-                  ))
-                }
-
-                {/* <svg
-                  className="ascPhoto"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
-                  ></path>
-                </svg> */}
+              <span onClick={() => sort("firstName")}>
+                {iconRenderer("firstName")}
               </span>
             </th>
 
             <th>
               Last Name{" "}
-              <span>
-                <svg
-                  className="ascPhoto"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
-                  ></path>
-                </svg>
+              <span onClick={() => sort("lastName")}>
+                {iconRenderer("lastName")}
               </span>
             </th>
 
             <th>
-              Email{" "}
-              <span>
-                <svg
-                  className="ascPhoto"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
-                  ></path>
-                </svg>
-              </span>
+              Email <span></span>
             </th>
 
             <th>
-              Phone{" "}
-              <span>
-                <svg
-                  className="ascPhoto"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
-                  ></path>
-                </svg>
-              </span>
+              Phone <span></span>
             </th>
 
             <th>Action</th>

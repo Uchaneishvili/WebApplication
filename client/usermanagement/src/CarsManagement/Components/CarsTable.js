@@ -10,6 +10,7 @@ function CarsTable() {
   const [pages, setPages] = useState();
   const [car, setCar] = useState({});
   const [modal, setModal] = useState();
+  const [confirmPopup, setConfirmPopup] = useState();
 
   const addCar = () => {
     setModal(true);
