@@ -3,7 +3,8 @@ import React from "react";
 import Navigation from "./UserManagement/Components/Navigation";
 import UserManagement from "./UserManagement/UserManagement";
 import CarsManagement from "./CarsManagement/CarsManagement";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Slider from "./Slider";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/UserManagement" component={UserManagement} />
         <Route path="/CarsManagement" component={CarsManagement} />
       </Router>
+      <Slider />
     </div>
   );
 }
