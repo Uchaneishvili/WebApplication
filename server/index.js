@@ -64,13 +64,13 @@ app.get("/cars/read", async (req, res) => {
       q["$or"] = [{ manufacturer: search }, { model: search }];
     }
 
-    const sort = {};
+    const sortInCar = {};
 
     if (sortField) {
-      sort[sortField] = sortDirection === "asc" ? 1 : -1;
+      sortInCar[sortField] = sortDirection === "asc" ? 1 : -1;
     }
 
-    let query = carsModel.find(q).sort(sort);
+    let query = carsModel.find(q).sort(sortInCar);
 
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
@@ -97,28 +97,6 @@ app.get("/cars/read", async (req, res) => {
       status: "Failed",
       message: "Server Error",
     });
-  }
-});
-
-app.get("/search", (req, res) => {
-  if (req.query.firstName) {
-    const searchField = req.query.search;
-    userModel
-      .find({
-        firstName: { $regex: searchField, $options: "$i" },
-      })
-      .then((data) => {
-        res.send(data);
-      });
-  } else if (req.query.lastName) {
-    const searchField = req.query.search;
-    userModel
-      .find({
-        lastName: { $regex: searchField, $options: "$i" },
-      })
-      .then((data) => {
-        res.send(data);
-      });
   }
 });
 

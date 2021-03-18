@@ -6,6 +6,7 @@ import axios from "axios";
 function Popup(props) {
   const { register, handleSubmit, errors } = useForm();
   const [popupEnable, setPopupEnable] = useState();
+  const [buttonIsDisabled, setButtonIsDisabled] = useState(true);
 
   useEffect(() => {
     setPopupEnable(props.modal);
@@ -13,10 +14,32 @@ function Popup(props) {
     console.log(props.modal);
   }, [props.modal]);
 
-  const onSubmit = () => {
-    if (props.car.Manufacturer && props.car.Model) {
-      props.loadData();
+  const onSubmitInsert = () => {
+    if (props.car.manufacturer != undefined && props.car.mode != undefined) {
+      props.loadData(1);
       props.closePopup();
+    }
+  };
+
+  const onSubmitupdate = () => {
+    if (props.car.manufacturer != undefined && props.car.model != undefined) {
+      props.loadData(1);
+      props.closePopup();
+    }
+  };
+
+  const onSubmit = () => {
+    if (props.car.manufacturer && props.car.model) {
+      props.loadData(1);
+      props.closePopup();
+      setButtonIsDisabled(false);
+    } else if (
+      props.car.manufacturer != undefined &&
+      props.car.model != undefined
+    ) {
+      props.loadData(1);
+      props.closePopup();
+      setButtonIsDisabled(false);
     }
   };
 
@@ -27,13 +50,32 @@ function Popup(props) {
         manufacturer: props.car.manufacturer,
         model: props.car.model,
       });
+      onSubmitInsert();
+      setButtonIsDisabled(true);
     } else {
       await axios.post("http://localhost:3001/cars/insert", {
         manufacturer: props.car.manufacturer,
         model: props.car.model,
       });
+      onSubmitupdate();
+      setButtonIsDisabled(true);
     }
-    onSubmit();
+  };
+
+  const modelFunction = (event) => {
+    props.setCar({
+      ...props.car,
+      model: event.target.value,
+    });
+    setButtonIsDisabled(false);
+  };
+
+  const manufacturerFunction = (event) => {
+    props.setCar({
+      ...props.car,
+      manufacturer: event.target.value,
+    });
+    setButtonIsDisabled(false);
   };
 
   return (
@@ -63,7 +105,7 @@ function Popup(props) {
               </div>
 
               <div>
-                <form className="popupForm" onSubmit={handleSubmit()}>
+                <form className="popupForm" onSubmit={handleSubmit(onSubmit)}>
                   <div className="form-group popup">
                     <label>Manufacturer </label>
                     <input
@@ -74,10 +116,7 @@ function Popup(props) {
                       name="manufacturer"
                       ref={register({ required: true })}
                       onChange={(event) => {
-                        props.setCar({
-                          ...props.car,
-                          manufacturer: event.target.value,
-                        });
+                        manufacturerFunction(event);
                       }}
                     />
                     {errors.manufacturer && (
@@ -96,12 +135,7 @@ function Popup(props) {
                       placeholder="Enter model of the car"
                       name="model"
                       ref={register({ required: true })}
-                      onChange={(event) => {
-                        props.setCar({
-                          ...props.car,
-                          model: event.target.value,
-                        });
-                      }}
+                      onChange={(event) => modelFunction(event)}
                     />
                     {errors.model && (
                       <div className="validation">
@@ -123,6 +157,7 @@ function Popup(props) {
                       className="btn btn-primary saveButton"
                       onClick={() => addOrUpdateCar()}
                       type="submit"
+                      disabled={buttonIsDisabled}
                     >
                       Save
                     </button>

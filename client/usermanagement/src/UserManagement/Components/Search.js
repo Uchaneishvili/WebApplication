@@ -28,7 +28,6 @@ function Search(props) {
         value={search}
         onChange={searchInput}
       />
-      <pre>{JSON.stringify(search, null, 2)}</pre>
 
       <button
         className="btn btn-light custom-button SearchButton"

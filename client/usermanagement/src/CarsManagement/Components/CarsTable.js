@@ -130,8 +130,6 @@ function CarsTable() {
 
   return (
     <div className="container">
-      <pre>{JSON.stringify(car, null, 2)}</pre>
-
       <div className="SearchAndAddUserContainer">
         <div className="centerButtonContainer">
           <button
@@ -150,15 +148,16 @@ function CarsTable() {
           <tr>
             <th>
               Manufacturer{" "}
-              {/* <span onClick={() => sortInCar("manufacturer")}> */}
-              {/* {iconRenderer("manufacturer")} */}
-              {/* </span> */}
+              <span onClick={() => sortInCar("manufacturer")}>
+                {/* {iconRenderer("manufacturer")} */}
+              </span>
             </th>
 
             <th>
-              Model {/* <span onClick={() => sortInCar("model")}> */}
-              {/* {iconRenderer("model")} */}
-              {/* </span> */}
+              Model
+              <span onClick={() => sortInCar("model")}>
+                {/* {iconRenderer("model")} */}
+              </span>
             </th>
             <th>Action</th>
           </tr>

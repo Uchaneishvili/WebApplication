@@ -29,7 +29,7 @@ function Popup(props) {
       props.selectedEditUser.phone &&
       props.selectedEditUser.phone.length == 9
     ) {
-      props.loadData();
+      props.loadData(1);
       props.closePopup();
       setButtonIsDisabled(false);
     } else if (
@@ -39,7 +39,7 @@ function Popup(props) {
       props.selectedEditUser.phone != undefined &&
       props.selectedEditUser.phone.length == undefined
     ) {
-      props.loadData();
+      props.loadData(1);
       props.closePopup();
       setButtonIsDisabled(false);
     }
@@ -55,7 +55,7 @@ function Popup(props) {
       props.selectedEditUser.phone != undefined &&
       props.selectedEditUser.phone.length == undefined
     ) {
-      props.loadData(props.pages);
+      props.loadData(1);
       props.closePopup();
     }
   };

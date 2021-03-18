@@ -57,7 +57,7 @@ function UserTable() {
 
   const deleteUser = async (id) => {
     await Axios.delete(`http://localhost:3001/delete/${id}`);
-    loadData(pages);
+    loadData(pages); //loadData(pages)
     setConfirmModalIsOpen(false);
   };
 
@@ -133,10 +133,6 @@ function UserTable() {
 
   return (
     <div className="container">
-      <pre>{JSON.stringify(selectedEditUser, null, 2)}</pre>
-      <pre>{JSON.stringify(confirmModalIsOpen, null, 2)}</pre>
-      <pre>{JSON.stringify(pages, null, 2)} </pre>
-
       <div className="SearchAndAddUserContainer">
         <div className="centerButtonContainer">
           <button
