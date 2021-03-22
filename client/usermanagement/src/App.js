@@ -11,6 +11,7 @@ function App() {
     <div>
       <Router>
         <Navigation />
+
         <Route path="/UserManagement" component={UserManagement} />
         <Route path="/CarsManagement" component={CarsManagement} />
         <Route path="/" exact component={Slider} />

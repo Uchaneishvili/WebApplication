@@ -12,7 +12,7 @@ function CarsTable() {
   const [modal, setModal] = useState();
   const [confirmPopup, setConfirmPopup] = useState();
   const [carIdToDelete, setCarIdToDelete] = useState();
-  const [sortObjectInCar, setSortObjectInCar] = useState();
+  const [sortObjectInCar, setSortObjectInCar] = useState({});
 
   const addCar = () => {
     setModal(true);
@@ -149,14 +149,14 @@ function CarsTable() {
             <th>
               Manufacturer{" "}
               <span onClick={() => sortInCar("manufacturer")}>
-                {/* {iconRenderer("manufacturer")} */}
+                {iconRenderer("manufacturer")}
               </span>
             </th>
 
             <th>
               Model
               <span onClick={() => sortInCar("model")}>
-                {/* {iconRenderer("model")} */}
+                {iconRenderer("model")}
               </span>
             </th>
             <th>Action</th>
