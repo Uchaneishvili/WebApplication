@@ -4,6 +4,8 @@ import Popup from "./Popup";
 import Pagination from "./Pagination";
 import Search from "./Search";
 import PopupConfirm from "./PopupConfirm";
+import "./CarsTable.css";
+import { Table, Button } from "antd";
 
 function CarsTable() {
   const [carsList, setCarsList] = useState();
@@ -128,23 +130,45 @@ function CarsTable() {
     }
   };
 
+  const tableHead = [
+    {
+      title: "Manufacturer",
+      dataIndex: "manufacturer",
+    },
+    {
+      title: "Model",
+      dataIndex: "model",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      render: () => (
+        <div>
+          <Button type="danger" onClick={openConfirmPopup}>
+            Delete
+          </Button>
+          <Button type="primary" onClick={editCar}>
+            Update
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="container">
       <div className="SearchAndAddUserContainer">
         <div className="centerButtonContainer">
-          <button
-            type="button"
-            className="btn btn-light custom-button"
-            onClick={addCar}
-          >
+          <Button type="primary" size="large" onClick={addCar}>
             Add Car
-          </button>
+          </Button>
         </div>
         <Search loadData={loadData} />
       </div>
 
-      <table className="table table-hover">
-        <thead>
+      {/* <pre>{JSON.stringify(carsList)}</pre> */}
+      <Table dataSource={carsList} columns={tableHead} pagination={false} />
+      {/* <thead>
           <tr>
             <th>
               Manufacturer{" "}
@@ -161,38 +185,37 @@ function CarsTable() {
             </th>
             <th>Action</th>
           </tr>
-        </thead>
+        </thead> */}
 
-        {carsList &&
-          carsList.map((val) => {
-            return (
-              <tbody key={val._id}>
-                <tr>
-                  <td scope="col" className="manufacturer" id="Manufacturer">
-                    {val.manufacturer}
-                  </td>
-                  <td scope="col" className="model" id="Model">
-                    {val.model}
-                  </td>
-                  <td scope="col" className="buttonsContainer" id="Action">
-                    <button
-                      className="btn btn-danger deteleTableButton"
-                      onClick={() => openConfirmPopup(val._id)}
-                    >
-                      delete
-                    </button>
-                    <button
-                      className="btn btn-success updateTableButton"
-                      onClick={() => editCar(val)}
-                    >
-                      Update
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            );
-          })}
-      </table>
+      {/* {carsList &&
+        carsList.map((val) => {
+          return (
+            <tbody key={val._id}>
+              <tr>
+                <td scope="col" className="manufacturer" id="Manufacturer">
+                  {val.manufacturer}
+                </td>
+                <td scope="col" className="model" id="Model">
+                  {val.model}
+                </td>
+                <td scope="col" className="buttonsContainer" id="Action">
+                  <button
+                    className="btn btn-danger deteleTableButton"
+                    onClick={() => openConfirmPopup(val._id)}
+                  >
+                    delete
+                  </button>
+                  <button
+                    className="btn btn-success updateTableButton"
+                    onClick={() => editCar(val)}
+                  >
+                    Update
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          );
+        })} */}
       <Pagination totalPages={pages} loadData={loadData} />
       <Popup
         modal={modal}

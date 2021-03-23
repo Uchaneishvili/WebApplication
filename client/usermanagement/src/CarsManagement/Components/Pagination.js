@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Pagination } from "antd";
 
-function Pagination(props) {
+function PaginationFnct(props) {
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -18,16 +19,16 @@ function Pagination(props) {
   const generatePages = (pagenum) => {
     const p = [];
     for (let i = 1; i <= pagenum; i++) {
-      p.push(
-        <li className="page-item current" key={`page-${i}`}>
-          <a
-            className={`page-link ${i === page ? "is-active" : ""}`}
-            onClick={() => setPage(i)}
-          >
-            {i}
-          </a>
-        </li>
-      );
+      // p.push(
+      //   <li className="page-item current" key={`page-${i}`}>
+      //     <a
+      //       className={`page-link ${i === page ? "is-active" : ""}`}
+      //       onClick={() => setPage(i)}
+      //     >
+      //       {i}
+      //     </a>
+      //   </li>
+      // );
     }
     return p;
   };
@@ -35,7 +36,9 @@ function Pagination(props) {
     <div>
       <div>
         <div aria-label="Page navigation example">
-          <ul className="pagination">
+          <Pagination defaultCurrent={1} total={5} showSizeChanger />
+
+          {/* <ul className="pagination">
             <li className="page-item">
               <a
                 className="page-link"
@@ -46,7 +49,8 @@ function Pagination(props) {
                 <span>&laquo;</span>
               </a>
             </li>
-            {generatePages(props.totalPages)}
+            
+            ;
             <li className="page-item">
               <a
                 className="page-link"
@@ -57,11 +61,11 @@ function Pagination(props) {
                 <span>&raquo;</span>
               </a>
             </li>
-          </ul>
+          </ul> */}
         </div>
       </div>
     </div>
   );
 }
 
-export default Pagination;
+export default PaginationFnct;

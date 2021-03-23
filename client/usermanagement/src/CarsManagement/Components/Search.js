@@ -1,46 +1,38 @@
 import React, { useState } from "react";
+import { Button, Input } from "antd";
 
 function Search(props) {
-  const [search, setSearch] = useState("");
+  const [searchVal, setSearchVal] = useState("");
   const [defaultValue, setDefaultValue] = useState(false);
 
   const resetSearch = () => {
     props.loadData(1);
-    setSearch("");
+    setSearchVal("");
     setDefaultValue(true);
   };
 
   const searchInput = (event) => {
     if (defaultValue == "true") {
-      setSearch("");
+      setSearchVal("");
     } else {
-      setSearch(event.target.value);
+      setSearchVal(event.target.value);
     }
   };
   return (
     <div>
       <div className="SearchContainer">
-        <input
-          type="text"
-          className="form-control SearchInput"
-          placeholder="Search..."
-          value={search}
+        <Input.Search
+          enterButton="Search"
+          size="large"
+          placeholder="Input search text"
+          onSearch={() => props.loadData(1, searchVal)}
+          value={searchVal}
           onChange={searchInput}
         />
 
-        <button
-          className="btn btn-light custom-button SearchButton"
-          type="submit"
-          onClick={() => props.loadData(1, search)}
-        >
-          Search
-        </button>
-        <button
-          className="btn btn-light custom-button ClearButton"
-          onClick={resetSearch}
-        >
+        <Button type="primary" size="large" onClick={resetSearch}>
           Clear
-        </button>
+        </Button>
       </div>
     </div>
   );
