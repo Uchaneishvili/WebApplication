@@ -1,3 +1,11 @@
 th {
   text-align: center !important;
 }
+
+.deleteCarButton {
+  margin: 3px;
+}
+
+.updateCarButton {
+  margin: 3px;
+}

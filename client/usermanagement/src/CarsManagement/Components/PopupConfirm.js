@@ -1,30 +1,25 @@
-import React from "react";
-import Modal from "react-modal";
+import React, { useState, useEffect } from "react";
+import { Modal } from "antd";
 
 function PopupConfirm(props) {
+  const [popupEnable, setPopupEnable] = useState();
+
+  useEffect(() => {
+    setPopupEnable(props.confirmPopup);
+
+    console.log(props.confirmPopup);
+  }, [props.confirmPopup]);
   return (
     <div>
-      <Modal className="Modal" ariaHideApp={false} isOpen={props.confirmPopup}>
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h4>Are you sure？</h4>
-            </div>
-            <div className="modal-footer">
-              <button
-                className="btn btn-success"
-                onClick={() => props.deleteCar(props.carIdToDelete)}
-              >
-                Yes
-              </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => props.closeConfirmPopup()}
-              >
-                No
-              </button>
-            </div>
-          </div>
+      <Modal
+        className="Modal"
+        visible={popupEnable}
+        isOpen={props.confirmPopup}
+        onCancel={() => props.closeConfirmPopup()}
+        onOk={() => props.deleteCar(props.carIdToDelete)}
+      >
+        <div className="modal-header">
+          <h4>Are you sure？</h4>
         </div>
       </Modal>
     </div>

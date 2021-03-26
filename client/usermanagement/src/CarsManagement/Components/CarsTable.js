@@ -21,9 +21,10 @@ function CarsTable() {
     setCar({});
   };
 
-  const editCar = (cars) => {
+  const editCar = (car) => {
     setModal(true);
-    setCar(cars);
+    setCar(car);
+    console.log("editcar");
   };
 
   const loadData = async (page, search, sortField, sortDirection) => {
@@ -46,6 +47,7 @@ function CarsTable() {
     await Axios.delete(`http://localhost:3001/cars/delete/${id}`);
     loadData();
     setConfirmPopup(false);
+    console.log("test");
   };
 
   const closePopup = () => {
@@ -142,12 +144,20 @@ function CarsTable() {
     {
       title: "Action",
       dataIndex: "action",
-      render: () => (
+      render: (car) => (
         <div>
-          <Button type="danger" onClick={openConfirmPopup}>
+          <Button
+            type="danger"
+            className="deleteCarButton"
+            onClick={openConfirmPopup}
+          >
             Delete
           </Button>
-          <Button type="primary" onClick={editCar}>
+          <Button
+            type="primary"
+            className="updateCarButton"
+            onClick={() => editCar(car)}
+          >
             Update
           </Button>
         </div>
@@ -165,9 +175,8 @@ function CarsTable() {
         </div>
         <Search loadData={loadData} />
       </div>
-
-      {/* <pre>{JSON.stringify(carsList)}</pre> */}
       <Table dataSource={carsList} columns={tableHead} pagination={false} />
+
       {/* <thead>
           <tr>
             <th>

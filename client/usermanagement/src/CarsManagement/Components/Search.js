@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./Search.css";
 import { Button, Input } from "antd";
 
 function Search(props) {
@@ -22,6 +23,7 @@ function Search(props) {
     <div>
       <div className="SearchContainer">
         <Input.Search
+          className="searchInputAnt"
           enterButton="Search"
           size="large"
           placeholder="Input search text"
