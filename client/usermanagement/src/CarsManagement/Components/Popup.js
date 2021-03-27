@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { Button, Modal } from "antd";
+import { Form, Modal, Input } from "antd";
 import "./Popup.css";
 
 function Popup(props) {
@@ -78,7 +78,24 @@ function Popup(props) {
       ...props.car,
       manufacturer: event.target.value,
     });
-    setButtonIsDisabled(false);
+    setButtonIsDisabled(true);
+  };
+
+  const onFinish = (values) => {
+    console.log("Success:", values);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
+  const layout = {
+    labelCol: {
+      span: 8,
+    },
+    wrapperCol: {
+      span: 16,
+    },
   };
 
   return (
@@ -89,8 +106,8 @@ function Popup(props) {
           visible={popupEnable}
           onCancel={() => props.closePopup()}
           onOk={() => addOrUpdateCar()}
-          okButtonProps={{ style: { buttonIsDisabled: true } }} // Disabled
-          cancelButtonProps={{ buttonIsDisabled: true }} // Disabled
+          okButtonProps={{ style: { buttonisdisabled: true } }} // Disabled
+          cancelButtonProps={{ buttonIsDisabled: buttonIsDisabled }} // Disabled
         >
           <div className="modal-header">
             {props.car && props.car._id ? (
@@ -105,8 +122,36 @@ function Popup(props) {
           </div>
 
           <div>
-            <form className="popupForm" onSubmit={handleSubmit(onSubmit)}>
-              <div className="form-group popup">
+            <Form
+              {...layout}
+              className="popupForm"
+              wrapperCol={{ span: 15 }}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+            >
+              <Form.Item
+                label="Manufacturer"
+                name="Manufacturer"
+                rules={[
+                  { required: true, message: "Please input Manufacturer" },
+                ]}
+              >
+                <Input
+                  onChange={(event) => {
+                    manufacturerFunction(event);
+                  }}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Model"
+                name="Model"
+                rules={[{ required: true, message: "Please input Model" }]}
+              >
+                <Input onChange={(event) => modelFunction(event)} />
+              </Form.Item>
+
+              {/* <div className="form-group popup">
                 <label>Manufacturer </label>
                 <input
                   type="text"
@@ -124,9 +169,9 @@ function Popup(props) {
                     Please choose a manufacturer.
                   </div>
                 )}
-              </div>
+              </div> */}
 
-              <div className="form-group popup">
+              {/* <div className="form-group popup">
                 <label>Model </label>
                 <input
                   type="text"
@@ -142,8 +187,8 @@ function Popup(props) {
                     Please choose a model of the car.
                   </div>
                 )}
-              </div>
-            </form>
+              </div> */}
+            </Form>
           </div>
         </Modal>
       </div>

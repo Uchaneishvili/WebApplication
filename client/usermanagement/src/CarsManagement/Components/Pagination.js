@@ -3,9 +3,12 @@ import { Pagination } from "antd";
 
 function PaginationFnct(props) {
   const [page, setPage] = useState(1);
+  const [state, setState] = useState({ minValue: 0, maxValue: 9 });
+  let x = props.carsList;
 
   useEffect(() => {
     props.loadData(page);
+    console.log(props.carsList);
   }, [page]);
 
   const previousPage = () => {
@@ -32,11 +35,30 @@ function PaginationFnct(props) {
     }
     return p;
   };
+
+  const handleChange = (value) => {
+    if (value <= 1) {
+      setState({
+        minValue: 0,
+        maxValue: 9,
+      });
+    } else {
+      setState({
+        minValue: state.maxValue,
+        maxValue: value * 9,
+      });
+    }
+  };
   return (
     <div>
       <div>
         <div aria-label="Page navigation example">
-          <Pagination defaultCurrent={1} total={5} showSizeChanger />
+          <Pagination
+            defaultCurrent={1}
+            onChange={handleChange}
+            defaultPageSize={4}
+            showSizeChanger
+          />
 
           {/* <ul className="pagination">
             <li className="page-item">
