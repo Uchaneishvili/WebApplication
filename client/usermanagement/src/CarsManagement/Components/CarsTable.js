@@ -62,6 +62,7 @@ function CarsTable() {
   const closeConfirmPopup = () => {
     setConfirmPopup(false);
   };
+
   const sortInCar = (sortField) => {
     if (!sortObjectInCar[sortField]) {
       setSortObjectInCar({ [sortField]: "asc" });
@@ -77,66 +78,11 @@ function CarsTable() {
     }
   };
 
-  // const iconRenderer = (fieldName) => {
-  //   if (sortObjectInCar[fieldName] === "asc") {
-  //     return (
-  //       <svg
-  //         className="sortIcon"
-  //         fill="none"
-  //         stroke="currentColor"
-  //         viewBox="0 0 24 24"
-  //         xmlns="http://www.w3.org/2000/svg"
-  //       >
-  //         <path
-  //           strokeLinecap="round"
-  //           strokeLinejoin="round"
-  //           strokeWidth="2"
-  //           d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
-  //         ></path>
-  //       </svg>
-  //     );
-  //   } else if (sortObjectInCar[fieldName] === "desc") {
-  //     return (
-  //       <svg
-  //         className="sortIcon"
-  //         fill="none"
-  //         stroke="currentColor"
-  //         viewBox="0 0 24 24"
-  //         xmlns="http://www.w3.org/2000/svg"
-  //       >
-  //         <path
-  //           strokeLinecap="round"
-  //           strokeLinejoin="round"
-  //           strokeWidth="2"
-  //           d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
-  //         ></path>
-  //       </svg>
-  //     );
-  //   } else {
-  //     return (
-  //       <svg
-  //         className="sortIcon"
-  //         fill="none"
-  //         stroke="currentColor"
-  //         viewBox="0 0 24 24"
-  //         xmlns="http://www.w3.org/2000/svg"
-  //       >
-  //         <path
-  //           strokeLinecap="round"
-  //           strokeLinejoin="round"
-  //           strokeWidth="2"
-  //           d="M4 6h16M4 12h16M4 18h7"
-  //         ></path>
-  //       </svg>
-  //     );
-  //   }
-  // };
-
   const tableHead = [
     {
       title: "Manufacturer",
       dataIndex: "manufacturer",
-      sorter: loadData(1, "", "manufacturer", "asc"),
+      // sorter: ,
     },
     {
       title: "Model",
@@ -147,20 +93,22 @@ function CarsTable() {
     },
     {
       title: "Action",
-      dataIndex: "action",
-      render: (car) => (
+      dataIndex: "_id",
+      render: (id, car) => (
         <div>
           <Button
             type="danger"
             className="deleteCarButton"
-            onClick={() => openConfirmPopup(car)}
+            onClick={() => openConfirmPopup(id)}
           >
             Delete
           </Button>
           <Button
             type="primary"
             className="updateCarButton"
-            onClick={() => editCar(car._id)}
+            onClick={() => {
+              editCar(car);
+            }}
           >
             Update
           </Button>
@@ -169,10 +117,18 @@ function CarsTable() {
     },
   ];
 
+  const handleTableChange = (pagination, filters, sorter) => {
+    console.log({
+      sortField: sorter.field,
+      sortOrder: sorter.order,
+      pagination,
+      ...filters,
+    });
+  };
+
   return (
     <div className="container">
       <pre>{JSON.stringify(car)}</pre>
-      <pre>{JSON.stringify(sortObjectInCar)}</pre>
 
       <div className="SearchAndAddUserContainer">
         <div className="centerButtonContainer">
@@ -182,7 +138,13 @@ function CarsTable() {
         </div>
         <Search loadData={loadData} />
       </div>
-      <Table dataSource={carsList} columns={tableHead} pagination={false} />
+      <Table
+        dataSource={carsList}
+        columns={tableHead}
+        pagination={false}
+        onChange={handleTableChange}
+        rowKey={(car) => car._id}
+      />
 
       {/* <thead>
           <tr>
