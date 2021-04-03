@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import Popup from "./Popup";
 import Pagination from "./Pagination";
@@ -6,20 +6,24 @@ import Search from "./Search";
 import PopupConfirm from "./PopupConfirm";
 import "./CarsTable.css";
 import { Table, Button } from "antd";
+import axios from "axios";
 
 function CarsTable() {
   const [carsList, setCarsList] = useState();
-  const [pages, setPages] = useState();
+  const [current, setCurrent] = useState();
+  const [total, setTotal] = useState();
   const [car, setCar] = useState({});
   const [modal, setModal] = useState();
   const [confirmPopup, setConfirmPopup] = useState();
   const [carIdToDelete, setCarIdToDelete] = useState();
-  const [sortObjectInCar, setSortObjectInCar] = useState({});
 
   const addCar = () => {
     setModal(true);
     setCar({});
   };
+  useEffect(() => {
+    loadData(1, "");
+  }, []);
 
   const editCar = (car) => {
     setModal(true);
@@ -27,7 +31,13 @@ function CarsTable() {
     console.log("editcar");
   };
 
-  const loadData = async (page, search, sortField, sortDirection) => {
+  const loadData = async (
+    page,
+    search,
+    sortField,
+    sortDirection,
+    filterFields
+  ) => {
     let url = `http://localhost:3001/cars/read?page=${page}`;
     if (search) {
       url += `&search=${search}`;
@@ -37,9 +47,19 @@ function CarsTable() {
       url += `&sortField=${sortField}&sortDirection=${sortDirection}`;
     }
 
+    if (filterFields) {
+      Object.keys(filterFields).forEach((key) => {
+        const joinedFilterValue = filterFields[key]?.join();
+        console.log(joinedFilterValue);
+        url += `&${key}=${joinedFilterValue}`;
+      });
+      console.log(url);
+    }
+
     await Axios.get(url).then((response) => {
       setCarsList(response.data.data);
-      setPages(response.data.pages);
+      setCurrent(response.data.page);
+      setTotal(response.data.count);
     });
   };
 
@@ -63,33 +83,40 @@ function CarsTable() {
     setConfirmPopup(false);
   };
 
-  const sortInCar = (sortField) => {
-    if (!sortObjectInCar[sortField]) {
-      setSortObjectInCar({ [sortField]: "asc" });
-      loadData(1, "", sortField, "asc");
-    } else {
-      if (sortObjectInCar[sortField] == "asc") {
-        setSortObjectInCar({ [sortField]: "desc" });
-        loadData(1, "", sortField, "desc");
-      } else {
-        setSortObjectInCar({});
-        loadData(1, "");
-      }
-    }
-  };
-
   const tableHead = [
     {
       title: "Manufacturer",
       dataIndex: "manufacturer",
-      // sorter: ,
+      sorter: true,
+      filters: [
+        {
+          text: "Opel",
+          value: "opel",
+        },
+        {
+          text: "Ford",
+          value: "ford",
+        },
+        {
+          text: "Toyota",
+          value: "toyota",
+        },
+      ],
     },
     {
       title: "Model",
       dataIndex: "model",
-      sorter: () => {
-        loadData(1, "", "model", "asc");
-      },
+      sorter: true,
+      filters: [
+        {
+          text: "corsa",
+          value: "corsa",
+        },
+        {
+          text: "Vectra",
+          value: "vectra",
+        },
+      ],
     },
     {
       title: "Action",
@@ -118,12 +145,9 @@ function CarsTable() {
   ];
 
   const handleTableChange = (pagination, filters, sorter) => {
-    console.log({
-      sortField: sorter.field,
-      sortOrder: sorter.order,
-      pagination,
-      ...filters,
-    });
+    loadData(pagination.current, "", sorter.field, sorter.order, filters);
+
+    console.log(filters);
   };
 
   return (
@@ -141,65 +165,11 @@ function CarsTable() {
       <Table
         dataSource={carsList}
         columns={tableHead}
-        pagination={false}
+        pagination={{ current: current, pageSize: 10, total: total }}
         onChange={handleTableChange}
         rowKey={(car) => car._id}
       />
 
-      {/* <thead>
-          <tr>
-            <th>
-              Manufacturer{" "}
-              <span onClick={() => sortInCar("manufacturer")}>
-                {iconRenderer("manufacturer")}
-              </span>
-            </th>
-
-            <th>
-              Model
-              <span onClick={() => sortInCar("model")}>
-                {iconRenderer("model")}
-              </span>
-            </th>
-            <th>Action</th>
-          </tr>
-        </thead> */}
-
-      {/* {carsList &&
-        carsList.map((val) => {
-          return (
-            <tbody key={val._id}>
-              <tr>
-                <td scope="col" className="manufacturer" id="Manufacturer">
-                  {val.manufacturer}
-                </td>
-                <td scope="col" className="model" id="Model">
-                  {val.model}
-                </td>
-                <td scope="col" className="buttonsContainer" id="Action">
-                  <button
-                    className="btn btn-danger deteleTableButton"
-                    onClick={() => openConfirmPopup(val._id)}
-                  >
-                    delete
-                  </button>
-                  <button
-                    className="btn btn-success updateTableButton"
-                    onClick={() => editCar(val)}
-                  >
-                    Update
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          );
-        })} */}
-      <Pagination
-        totalPages={pages}
-        loadData={loadData}
-        carsList={carsList}
-        setCarsList={setCarsList}
-      />
       <Popup
         modal={modal}
         car={car}

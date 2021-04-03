@@ -57,37 +57,48 @@ app.post("/cars/insert", async (req, res) => {
 
 app.get("/cars/read", async (req, res) => {
   try {
-    const { search, sortDirection, sortField } = req.query;
+    const { search, sortDirection, sortField, model, manufacturer } = req.query;
     const q = {};
+    if (model) {
+      model.split(",").forEach((value) => {
+        q["$or"] = [{ model: value }];
+      });
+    }
+
+    if (manufacturer) {
+      manufacturer.split(",").forEach((value) => {
+        // q["$or"].push({ manufacturer: value });
+        q["$or"] = [{ manufacturer: value }];
+      });
+    }
 
     if (search) {
       q["$or"] = [{ manufacturer: search }, { model: search }];
+      // q["$or"].push({ manufacturer: search });
+      // q["$or"].push({ model: search });
     }
 
     const sortInCar = {};
 
-    if (sortField) {
-      sortInCar[sortField] = sortDirection === "asc" ? 1 : -1;
+    if (sortField && sortDirection != "undefined") {
+      sortInCar[sortField] = sortDirection === "ascend" ? 1 : -1;
     }
-
-    let query = carsModel.find(q).sort(sortInCar);
 
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 10;
     const skip = (page - 1) * pageSize;
     const total = await carsModel.countDocuments(q);
 
-    const pages = Math.ceil(total / pageSize);
-
-    query = query.skip(skip).limit(pageSize);
-
-    const result = await query;
+    const result = await carsModel
+      .find(q)
+      .sort(sortInCar)
+      .skip(skip)
+      .limit(pageSize);
 
     res.status(200).json({
       status: "Success",
-      count: result.length,
+      count: total,
       page,
-      pages,
       data: result,
     });
   } catch (error) {

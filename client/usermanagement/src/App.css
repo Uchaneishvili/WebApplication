@@ -1,1 +1,34 @@
 @import "~antd/dist/antd.css";
+
+.site-layout-background-header {
+  background-color: white;
+}
+
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.anticon svg {
+  display: flex;
+}
+
+.breadCrumb {
+  background-color: white;
+  margin: 10px 0px;
+  padding: 1px 10px;
+}
+
+.content-container {
+  background-color: white;
+}
+.site-layout-background-title {
+  background-color: transparent;
+}
+
+/* .sider {
+  height: 100%;
+  width: 250px;
+  position: fixed;
+} */

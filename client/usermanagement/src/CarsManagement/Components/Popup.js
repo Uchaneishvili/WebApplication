@@ -3,9 +3,7 @@ import axios from "axios";
 import { Form, Modal, Input } from "antd";
 import "./Popup.css";
 import { useForm } from "antd/lib/form/Form";
-
 function Popup(props) {
-  const { register, handleSubmit, errors } = useForm();
   const [popupEnable, setPopupEnable] = useState();
 
   const [form] = useForm();
