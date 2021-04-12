@@ -59,23 +59,29 @@ app.get("/cars/read", async (req, res) => {
   try {
     const { search, sortDirection, sortField, model, manufacturer } = req.query;
     const q = {};
+    const strArr = [];
+
+    console.log(model);
     if (model) {
       model.split(",").forEach((value) => {
         q["$or"] = [{ model: value }];
+        // q["or"].push({ model: value });
+        strArr.push(q["$or"]);
+        console.log(strArr);
       });
     }
 
     if (manufacturer) {
       manufacturer.split(",").forEach((value) => {
-        // q["$or"].push({ manufacturer: value });
-        q["$or"] = [{ manufacturer: value }];
+        q["$or"].push({ manufacturer: value });
+        // q["$or"] = [{ manufacturer: value }];
       });
     }
 
     if (search) {
-      q["$or"] = [{ manufacturer: search }, { model: search }];
-      // q["$or"].push({ manufacturer: search });
-      // q["$or"].push({ model: search });
+      // q["$or"] = [{ manufacturer: search }, { model: search }];
+      q["$or"].push({ manufacturer: search });
+      q["$or"].push({ model: search });
     }
 
     const sortInCar = {};

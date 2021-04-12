@@ -6,8 +6,6 @@ function PopupConfirm(props) {
 
   useEffect(() => {
     setPopupEnable(props.confirmPopup);
-
-    console.log(props.confirmPopup);
   }, [props.confirmPopup]);
   return (
     <div>

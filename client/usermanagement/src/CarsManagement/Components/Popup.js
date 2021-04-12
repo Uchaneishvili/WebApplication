@@ -14,8 +14,6 @@ function Popup(props) {
 
   useEffect(() => {
     setPopupEnable(props.modal);
-
-    console.log(props.modal);
   }, [props.modal]);
 
   const addOrUpdateCar = async () => {

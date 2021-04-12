@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import Popup from "./Popup";
-import Pagination from "./Pagination";
 import Search from "./Search";
 import PopupConfirm from "./PopupConfirm";
 import "./CarsTable.css";
 import { Table, Button } from "antd";
-import axios from "axios";
 
 function CarsTable() {
   const [carsList, setCarsList] = useState();
@@ -50,10 +48,8 @@ function CarsTable() {
     if (filterFields) {
       Object.keys(filterFields).forEach((key) => {
         const joinedFilterValue = filterFields[key]?.join();
-        console.log(joinedFilterValue);
         url += `&${key}=${joinedFilterValue}`;
       });
-      console.log(url);
     }
 
     await Axios.get(url).then((response) => {
@@ -146,8 +142,6 @@ function CarsTable() {
 
   const handleTableChange = (pagination, filters, sorter) => {
     loadData(pagination.current, "", sorter.field, sorter.order, filters);
-
-    console.log(filters);
   };
 
   return (
