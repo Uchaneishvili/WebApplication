@@ -59,9 +59,9 @@ app.get("/cars/read", async (req, res) => {
   try {
     const { search, sortDirection, sortField, model, manufacturer } = req.query;
     const q = {};
+    q["$or"] = [{}];
     const strArr = [];
 
-    console.log(model);
     if (model) {
       model.split(",").forEach((value) => {
         q["$or"] = [{ model: value }];
@@ -94,6 +94,7 @@ app.get("/cars/read", async (req, res) => {
     const pageSize = parseInt(req.query.pageSize) || 10;
     const skip = (page - 1) * pageSize;
     const total = await carsModel.countDocuments(q);
+    console.log("test", q);
 
     const result = await carsModel
       .find(q)
@@ -142,6 +143,7 @@ app.get("/read", async (req, res) => {
 
     query = query.skip(skip).limit(pageSize);
     const result = await query;
+    console.log("querySearch", querySearch);
 
     res.status(200).json({
       status: "Success",

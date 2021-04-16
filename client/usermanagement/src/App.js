@@ -2,12 +2,7 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 import UserManagement from "./UserManagement/UserManagement";
 import CarsManagement from "./CarsManagement/CarsManagement";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  BrowserRouter,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Layout, Menu, Breadcrumb } from "antd";
 import { UserOutlined, HomeOutlined, CarOutlined } from "@ant-design/icons";
 import Slider from "./Slider";
@@ -15,7 +10,6 @@ import Slider from "./Slider";
 function App() {
   const { Header, Content, Sider } = Layout;
   const [collapsed, setCollapsed] = useState(false);
-  const [menuItemTitle, setMenuItemTitle] = useState(false);
   let title = null;
 
   useEffect(() => {
@@ -23,12 +17,6 @@ function App() {
       setCollapsed(collapsed);
     };
   }, [collapsed]);
-
-  // useEffect(() => {
-  //   console.log("home");
-
-  //   setMenuItemTitle(menuItemTitle);
-  // }, []);
 
   if (window.location.pathname == "/UserManagement") {
     title = "User Management";
@@ -42,14 +30,19 @@ function App() {
     <div>
       <Router>
         <Layout style={{ minHeight: "100vh" }}>
-          <Sider collapsible onCollapse={() => setCollapsed(collapsed)}>
+          <Sider
+            collapsible
+            onCollapse={() => setCollapsed(collapsed)}
+            style={{
+              overflow: "auto",
+              height: "100vh",
+              position: "fixed",
+              left: 0,
+            }}
+          >
             <div className="logo" />
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-              <Menu.Item
-                key="1"
-                icon={<HomeOutlined />}
-                // onClick={() => setMenuItemTitle(true)}
-              >
+              <Menu.Item key="1" icon={<HomeOutlined />}>
                 Home
                 <Link to={"/"}></Link>
               </Menu.Item>
@@ -65,7 +58,7 @@ function App() {
               </Menu.Item>
             </Menu>
           </Sider>
-          <Layout className="site-layout">
+          <Layout className="site-layout" style={{ marginLeft: 200 }}>
             <Header
               className="site-layout-background-header"
               style={{ padding: 0 }}
@@ -90,16 +83,13 @@ function App() {
               <div className="content-container">
                 <div
                   className="site-layout-background"
-                  style={{ padding: 24, minHeight: 360 }}
+                  style={{ margin: "24px 16px 0", overflow: "initial" }}
                 >
-                  <pre>{JSON.stringify(menuItemTitle)}</pre>
                   <Route path="/" exact component={Slider} />
                   <Route path="/UserManagement" component={UserManagement} />
                   <Route path="/CarsManagement" component={CarsManagement} />
                 </div>
               </div>
-
-              <button onClick={() => console.log("test")}>test</button>
             </Content>
           </Layout>
         </Layout>
