@@ -4,8 +4,7 @@ const app = express();
 const cors = require("cors");
 const userModel = require("./models/User");
 const carsModel = require("./models/Cars");
-// const Sequelize = require("sequilize");
-// const Op = Sequelize.Op;
+const sliderModel = require("./models/Sliders");
 
 app.use(express.json());
 app.use(cors());
@@ -207,6 +206,27 @@ app.delete("/delete/:id", async (req, res) => {
 
   await userModel.findByIdAndRemove(id).exec();
   res.send("deleted");
+});
+
+//Slider Management
+
+app.get("/slidermanagement/read", async (req, res) => {});
+
+app.post("/slidermanagement/insert", async (req, res) => {
+  const { image, name } = req.body;
+
+  console.log(req.body);
+
+  const sliders = new sliderModel({
+    image: image,
+    name: name,
+  });
+
+  try {
+    await sliders.save();
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 app.listen(3001, () => {

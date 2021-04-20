@@ -2,9 +2,15 @@ import "./App.css";
 import React, { useEffect, useState } from "react";
 import UserManagement from "./UserManagement/UserManagement";
 import CarsManagement from "./CarsManagement/CarsManagement";
+import SliderManagement from "./SliderManagement/SliderManagement";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Layout, Menu, Breadcrumb } from "antd";
-import { UserOutlined, HomeOutlined, CarOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  HomeOutlined,
+  CarOutlined,
+  SlidersOutlined,
+} from "@ant-design/icons";
 import Slider from "./Slider";
 
 function App() {
@@ -24,8 +30,15 @@ function App() {
     title = "Cars Management";
   } else if (window.location.pathname == "/Home") {
     title = "";
+  } else if (window.location.pathname == "/SliderManagement") {
+    title = "Slider Management";
   }
 
+  const changeClassname = () => {
+    document.getElementsByClassName("");
+  };
+
+  console.log(window.location.pathname);
   return (
     <div>
       <Router>
@@ -42,19 +55,47 @@ function App() {
           >
             <div className="logo" />
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-              <Menu.Item key="1" icon={<HomeOutlined />}>
+              <Menu.Item
+                className=""
+                key="1"
+                icon={<HomeOutlined />}
+                onClick={() => {
+                  window.location.pathname = "/";
+                }}
+              >
                 Home
                 <Link to={"/"}></Link>
               </Menu.Item>
 
-              <Menu.Item key="2" icon={<UserOutlined />}>
+              <Menu.Item
+                key="2"
+                icon={<UserOutlined />}
+                onClick={() => {
+                  window.location.pathname = "/UserManagement";
+                }}
+              >
                 User Management
-                <Link to={"/UserManagement"}></Link>
               </Menu.Item>
 
-              <Menu.Item key="9" icon={<CarOutlined />}>
+              <Menu.Item
+                key="3"
+                icon={<CarOutlined />}
+                onClick={() => {
+                  window.location.pathname = "/CarsManagement";
+                }}
+              >
                 Car Management
-                <Link to={"/CarsManagement"}></Link>
+              </Menu.Item>
+              <Menu.Item
+                className=""
+                key="4"
+                icon={<SlidersOutlined />}
+                onClick={() => {
+                  window.location.pathname = "/SliderManagement";
+                }}
+              >
+                Slider Management
+                <Link to={"/SliderManagement"}></Link>
               </Menu.Item>
             </Menu>
           </Sider>
@@ -77,7 +118,7 @@ function App() {
                 className="site-layout-background-title"
                 style={{ padding: 0 }}
               >
-                {title}
+                <b>{title}</b>
               </Header>
 
               <div className="content-container">
@@ -88,6 +129,11 @@ function App() {
                   <Route path="/" exact component={Slider} />
                   <Route path="/UserManagement" component={UserManagement} />
                   <Route path="/CarsManagement" component={CarsManagement} />
+                  <Route
+                    path="/SliderManagement"
+                    exact
+                    component={SliderManagement}
+                  />
                 </div>
               </div>
             </Content>

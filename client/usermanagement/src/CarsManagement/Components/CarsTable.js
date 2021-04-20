@@ -4,6 +4,8 @@ import Popup from "./Popup";
 import Search from "./Search";
 import PopupConfirm from "./PopupConfirm";
 import "./CarsTable.css";
+import { PlusOutlined } from "@ant-design/icons";
+
 import { Table, Button } from "antd";
 
 function CarsTable() {
@@ -151,7 +153,12 @@ function CarsTable() {
 
       <div className="SearchAndAddUserContainer">
         <div className="centerButtonContainer">
-          <Button type="primary" size="large" onClick={addCar}>
+          <Button
+            type="primary"
+            size="large"
+            onClick={addCar}
+            icon={<PlusOutlined />}
+          >
             Add Car
           </Button>
         </div>
