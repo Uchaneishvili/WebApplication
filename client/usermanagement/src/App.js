@@ -5,6 +5,7 @@ import CarsManagement from "./CarsManagement/CarsManagement";
 import SliderManagement from "./SliderManagement/SliderManagement";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { Layout, Menu, Breadcrumb } from "antd";
+import Detail from "./SliderManagement/Components/Detail";
 import {
   UserOutlined,
   HomeOutlined,
@@ -55,47 +56,19 @@ function App() {
           >
             <div className="logo" />
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-              <Menu.Item
-                className=""
-                key="1"
-                icon={<HomeOutlined />}
-                onClick={() => {
-                  window.location.pathname = "/";
-                }}
-              >
-                Home
-                <Link to={"/"}></Link>
+              <Menu.Item className="" key="1" icon={<HomeOutlined />}>
+                <Link to="/CarsManagement">Home</Link>
               </Menu.Item>
 
-              <Menu.Item
-                key="2"
-                icon={<UserOutlined />}
-                onClick={() => {
-                  window.location.pathname = "/UserManagement";
-                }}
-              >
-                User Management
+              <Menu.Item key="2" icon={<UserOutlined />}>
+                <Link to="/UserManagement">User Management</Link>
               </Menu.Item>
 
-              <Menu.Item
-                key="3"
-                icon={<CarOutlined />}
-                onClick={() => {
-                  window.location.pathname = "/CarsManagement";
-                }}
-              >
-                Car Management
+              <Menu.Item key="3" icon={<CarOutlined />}>
+                <Link to="/CarsManagement">Car Management</Link>
               </Menu.Item>
-              <Menu.Item
-                className=""
-                key="4"
-                icon={<SlidersOutlined />}
-                onClick={() => {
-                  window.location.pathname = "/SliderManagement";
-                }}
-              >
-                Slider Management
-                <Link to={"/SliderManagement"}></Link>
+              <Menu.Item className="" key="4" icon={<SlidersOutlined />}>
+                <Link to="/SliderManagement">Slider Management</Link>
               </Menu.Item>
             </Menu>
           </Sider>
@@ -130,10 +103,15 @@ function App() {
                   <Route path="/UserManagement" component={UserManagement} />
                   <Route path="/CarsManagement" component={CarsManagement} />
                   <Route
-                    path="/SliderManagement"
                     exact
+                    path="/SliderManagement"
                     component={SliderManagement}
                   />
+                  <Route
+                    component={Detail}
+                    path={"/SliderManagement/addSlider"}
+                  />
+                  <Route component={Detail} path={"/SliderManagement/edit"} />
                 </div>
               </div>
             </Content>

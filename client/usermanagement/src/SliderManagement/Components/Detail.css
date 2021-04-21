@@ -1,0 +1,25 @@
+.popupForm {
+  width: 80%;
+  padding-top: 30px;
+}
+
+.uploadFile {
+  padding-bottom: 30px;
+}
+
+.saveButton {
+  width: 50%;
+  margin-bottom: 20px;
+}
+
+.saveBtn {
+  width: 50%;
+  margin-left: 33.33333333%;
+}
+
+.cancelButton {
+  width: 150px;
+  float: right;
+  margin-top: 20px;
+  margin-left: 20px;
+}

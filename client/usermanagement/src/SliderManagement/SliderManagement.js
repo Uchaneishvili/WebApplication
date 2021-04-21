@@ -4,7 +4,6 @@ import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { Popconfirm, message } from "antd";
 import Detail from "./Components/Detail";
-import "./SliderManagement.css";
 
 function Dynamicform() {
   const selectedRowKeys = [];
@@ -25,16 +24,11 @@ function Dynamicform() {
       dataIndex: "action",
       render: (id) => (
         <div>
-          <Router>
-            <div>
-              <Route path={"/test"} exact component={Detail} />
-              <Button>
-                <Link exact to="/test">
-                  <EditOutlined />
-                </Link>
-              </Button>
-            </div>
-          </Router>
+          <Link to={`SliderManagement/edit/:${id}`}>
+            <Button>
+              <EditOutlined />
+            </Button>
+          </Link>
 
           <Button>
             <Popconfirm
@@ -69,28 +63,19 @@ function Dynamicform() {
     <div>
       <div>
         <div style={{ marginBottom: 16 }}>
-          <Router>
-            <div
-              style={{
-                float: "right",
-                marginTop: 20,
-                marginBottom: 20,
-              }}
-            >
-              <Link exact to={"/addSlider"}>
-                <Route>
-                  <Route component={Detail} exact path={"/addSlider"} />
-                </Route>
-                <Button
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  className="addSliderBtn"
-                >
-                  Add Slider
-                </Button>
-              </Link>
-            </div>
-          </Router>
+          <div
+            style={{
+              float: "right",
+              marginTop: 20,
+              marginBottom: 20,
+            }}
+          >
+            <Link to={"SliderManagement/addSlider"}>
+              <Button type="primary" icon={<PlusOutlined />}>
+                Add Slider
+              </Button>
+            </Link>
+          </div>
         </div>
         <Table
           rowSelection={rowSelection}
