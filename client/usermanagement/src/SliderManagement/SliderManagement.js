@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Button } from "antd";
 import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { Popconfirm, message } from "antd";
+import Axios from "axios";
 import Detail from "./Components/Detail";
+import "./SliderManagement.css";
 
 function Dynamicform() {
+  const [slider, setSlider] = useState({});
+  const [sliderList, setSliderList] = useState();
   const selectedRowKeys = [];
   const rowSelection = {
     selectedRowKeys,
@@ -21,11 +25,11 @@ function Dynamicform() {
     },
     {
       title: "Action",
-      dataIndex: "action",
-      render: (id) => (
+      dataIndex: "_id",
+      render: (id, slider) => (
         <div>
           <Link to={`SliderManagement/edit/:${id}`}>
-            <Button>
+            <Button onClick={() => editSlider(slider)}>
               <EditOutlined />
             </Button>
           </Link>
@@ -33,9 +37,9 @@ function Dynamicform() {
           <Button>
             <Popconfirm
               title="Are you sure to delete this task?"
-              onConfirm={confirm}
               okText="Yes"
               cancelText="No"
+              onConfirm={() => deleteSlider(id)}
             >
               <DeleteOutlined />
             </Popconfirm>
@@ -45,22 +49,34 @@ function Dynamicform() {
     },
   ];
 
-  function confirm(e) {
-    console.log(e);
-    message.success("Successful");
-  }
-
-  const data = [];
-  for (let i = 0; i < 46; i++) {
-    data.push({
-      key: i,
-      name: `Edward King ${i}`,
-      image: 32,
+  const loadData = async () => {
+    let url = `http://localhost:3001/slidermanagement/read`;
+    await Axios.get(url).then((response) => {
+      setSliderList(response.data);
+      console.log(response.data);
     });
-  }
+  };
 
+  const editSlider = (slider) => {
+    setSlider(slider);
+    console.log("editSlider");
+    console.log(slider);
+  };
+
+  const deleteSlider = async (id) => {
+    await Axios.delete(`http://localhost:3001/slidermanagement/delete/${id}`);
+    loadData();
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  console.log(slider);
   return (
     <div>
+      <pre>{JSON.stringify(slider)}</pre>
+
       <div>
         <div style={{ marginBottom: 16 }}>
           <div
@@ -78,10 +94,16 @@ function Dynamicform() {
           </div>
         </div>
         <Table
+          className="sliderTable"
           rowSelection={rowSelection}
           columns={columns}
-          dataSource={data}
+          dataSource={sliderList}
+          pagination={false}
+          rowKey={(slider) => slider._id}
         />
+      </div>
+      <div className="test">
+        <Detail slider={slider} />
       </div>
     </div>
   );

@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { Form, Input, Button, Upload } from "antd";
 import { useForm } from "antd/lib/form/Form";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import axios from "axios";
 
 import "./Detail.css";
 
-function Detail() {
+function Detail(props) {
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
@@ -12,64 +14,50 @@ function Detail() {
   const [form] = useForm();
 
   useEffect(() => {
-    form.setFieldsValue();
-  }, []);
+    form.setFieldsValue(props.slider);
+  }, [props.slider]);
 
-  const validateMessages = {
-    required: "${label} is required!",
-    types: {
-      email: "${label} is not a valid email!",
-      number: "${label} is not a valid number!",
-    },
-    number: {
-      range: "${label} must be between ${min} and ${max}",
-    },
-  };
+  const addOrUpdateSlider = async () => {
+    console.log(form.getFieldValue());
+    console.log();
 
-  const onFinish = (value) => {
-    console.log(value);
-  };
+    const formValues = form.getFieldValue();
+    await form.validateFields();
 
-  console.log("Detail");
+    if (props.slider && props.slider._id) {
+      await axios.put(
+        `http://localhost:3001//slidermanagement/edit/:id`,
 
-  const props = {
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    onChange({ file, fileList }) {
-      if (file.status !== "uploading") {
-        console.log(file, fileList);
-      }
-    },
-    defaultFileList: [
-      {
-        uid: "1",
-        name: "xxx.png",
-        status: "done",
-        response: "Server Error 500", // custom error message to show
-        url: "http://www.baidu.com/xxx.png",
-      },
-      {
-        uid: "2",
-        name: "yyy.png",
-        status: "done",
-        url: "http://www.baidu.com/yyy.png",
-      },
-      {
-        uid: "3",
-        name: "zzz.png",
-        status: "error",
-        response: "Server Error 500", // custom error message to show
-        url: "http://www.baidu.com/zzz.png",
-      },
-    ],
+        {
+          _id: props.slider._id,
+          name: formValues.name,
+          image: formValues.image,
+        }
+      );
+      console.log("Edit");
+    } else if (props.slider && !props.slider._id) {
+      await axios.post(
+        `http://localhost:3001/slidermanagement/insert`,
+
+        {
+          name: formValues.name,
+          image: formValues.image,
+        }
+      );
+      console.log("Add Slider");
+    }
+    form.resetFields();
   };
 
   return (
     <>
-      <Button type="danger" className="cancelButton">
-        Cancel
-      </Button>
+      <Link to="/SliderManagement">
+        <Button type="danger" className="cancelButton">
+          Cancel
+        </Button>
+      </Link>
       <Form
-        // form={form}
+        form={form}
         {...layout}
         wrapperCol={{ span: 15 }}
         className="popupForm"
@@ -86,7 +74,7 @@ function Detail() {
           label="Image"
           name="image"
           className="uploadFile"
-          rules={[{ required: true, message: "Please input name" }]}
+          rules={[{ required: true, message: "Please input text" }]}
         >
           {/* <Upload {...props}>
             <Button icon={<UploadOutlined />}>Upload</Button>
@@ -95,7 +83,11 @@ function Detail() {
         </Form.Item>
 
         <Form.Item className="saveBtn">
-          <Button type="primary" className="saveButton">
+          <Button
+            type="primary"
+            className="saveButton"
+            onClick={addOrUpdateSlider}
+          >
             Save
           </Button>
         </Form.Item>

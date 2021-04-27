@@ -210,7 +210,15 @@ app.delete("/delete/:id", async (req, res) => {
 
 //Slider Management
 
-app.get("/slidermanagement/read", async (req, res) => {});
+app.get("/slidermanagement/read", async (req, res) => {
+  sliderModel.find({}, (err, result) => {
+    if (err) {
+      res.send(err);
+    }
+
+    res.send(result);
+  });
+});
 
 app.post("/slidermanagement/insert", async (req, res) => {
   const { image, name } = req.body;
@@ -224,11 +232,33 @@ app.post("/slidermanagement/insert", async (req, res) => {
 
   try {
     await sliders.save();
+    res.send("inserted slider");
   } catch (error) {
     console.log(error);
   }
 });
 
+app.delete("/slidermanagement/delete/:id", async (req, res) => {
+  const id = req.params.id;
+
+  await sliderModel.findByIdAndRemove(id).exec();
+  res.send("deleted");
+});
+
+app.put("/slidermanagement/edit/:id", async (req, res) => {
+  const { image, name, _id } = req.body;
+
+  try {
+    const updateSlider = await sliderModel.findById(_id);
+    updateSlider.name = name;
+    updateSlider.image = image;
+    updateSlider.save();
+
+    res.send("update slider");
+  } catch (error) {
+    console.log(error);
+  }
+});
 app.listen(3001, () => {
   console.log("Server is running on port 3001 ");
 });

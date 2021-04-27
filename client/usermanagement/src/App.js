@@ -35,11 +35,6 @@ function App() {
     title = "Slider Management";
   }
 
-  const changeClassname = () => {
-    document.getElementsByClassName("");
-  };
-
-  console.log(window.location.pathname);
   return (
     <div>
       <Router>
