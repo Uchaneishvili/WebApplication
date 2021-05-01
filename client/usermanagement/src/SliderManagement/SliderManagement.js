@@ -7,13 +7,25 @@ import Axios from "axios";
 import Detail from "./Components/Detail";
 import "./SliderManagement.css";
 
-function Dynamicform() {
+function SliderManagement() {
   const [slider, setSlider] = useState({});
   const [sliderList, setSliderList] = useState();
   const selectedRowKeys = [];
   const rowSelection = {
     selectedRowKeys,
   };
+
+  const editSlider = (slider) => {
+    setSlider(slider);
+    console.log("sliderManagement", slider);
+    console.log("sliderManagement ID", slider._id);
+  };
+
+  const addSlider = () => {
+    setSlider({});
+    console.log("addSlider");
+  };
+
   const columns = [
     {
       title: "Image",
@@ -34,16 +46,19 @@ function Dynamicform() {
             </Button>
           </Link>
 
-          <Button>
-            <Popconfirm
-              title="Are you sure to delete this task?"
-              okText="Yes"
-              cancelText="No"
-              onConfirm={() => deleteSlider(id)}
-            >
+          {/* <Button> */}
+          <Popconfirm
+            placement="topLeft"
+            title="Are you sure to delete the slider?"
+            okText="Yes"
+            cancelText="No"
+            onConfirm={() => deleteSlider(slider._id)}
+          >
+            <Button>
               <DeleteOutlined />
-            </Popconfirm>
-          </Button>
+            </Button>
+          </Popconfirm>
+          {/* </Button> */}
         </div>
       ),
     },
@@ -53,14 +68,7 @@ function Dynamicform() {
     let url = `http://localhost:3001/slidermanagement/read`;
     await Axios.get(url).then((response) => {
       setSliderList(response.data);
-      console.log(response.data);
     });
-  };
-
-  const editSlider = (slider) => {
-    setSlider(slider);
-    console.log("editSlider");
-    console.log(slider);
   };
 
   const deleteSlider = async (id) => {
@@ -72,7 +80,6 @@ function Dynamicform() {
     loadData();
   }, []);
 
-  console.log(slider);
   return (
     <div>
       <pre>{JSON.stringify(slider)}</pre>
@@ -87,7 +94,11 @@ function Dynamicform() {
             }}
           >
             <Link to={"SliderManagement/addSlider"}>
-              <Button type="primary" icon={<PlusOutlined />}>
+              <Button
+                type="primary"
+                onClick={addSlider}
+                icon={<PlusOutlined />}
+              >
                 Add Slider
               </Button>
             </Link>
@@ -103,10 +114,10 @@ function Dynamicform() {
         />
       </div>
       <div className="test">
-        <Detail slider={slider} />
+        <Detail slider={slider} sliderId={slider._id} />
       </div>
     </div>
   );
 }
 
-export default Dynamicform;
+export default SliderManagement;

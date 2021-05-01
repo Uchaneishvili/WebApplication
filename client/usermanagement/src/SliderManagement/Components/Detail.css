@@ -7,6 +7,10 @@
   padding-bottom: 30px;
 }
 
+.inputFileField {
+  border: none;
+}
+
 .saveButton {
   width: 50%;
   margin-bottom: 20px;

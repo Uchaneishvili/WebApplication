@@ -2,9 +2,21 @@ import React, { useEffect } from "react";
 import { Form, Input, Button, Upload } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { UploadOutlined } from "@ant-design/icons";
+
+// import { aws } from "../../keys";
+import S3 from "react-aws-s3";
 import axios from "axios";
 
 import "./Detail.css";
+
+const config = {
+  bucketName: "SliderImage",
+  dirName: "photos",
+  region: "eu-west-1",
+  // accessKeyId: aws.accessKeyId,
+  // secretAccessKey: aws.secretAccessKey,
+};
 
 function Detail(props) {
   const layout = {
@@ -19,36 +31,49 @@ function Detail(props) {
 
   const addOrUpdateSlider = async () => {
     console.log(form.getFieldValue());
-    console.log();
-
     const formValues = form.getFieldValue();
     await form.validateFields();
 
-    if (props.slider && props.slider._id) {
-      await axios.put(
-        `http://localhost:3001//slidermanagement/edit/:id`,
+    console.log("details", props.slider);
+    console.log("details sliderId", props.sliderId);
+    console.log("setSlider");
 
-        {
-          _id: props.slider._id,
-          name: formValues.name,
-          image: formValues.image,
-        }
-      );
-      console.log("Edit");
-    } else if (props.slider && !props.slider._id) {
-      await axios.post(
-        `http://localhost:3001/slidermanagement/insert`,
+    // if (props.slider) {
+    // await axios.put(
+    //   `http://localhost:3001//slidermanagement/edit/:${props.sliderId}`,
 
-        {
-          name: formValues.name,
-          image: formValues.image,
-        }
-      );
-      console.log("Add Slider");
-    }
+    //   {
+    //     _id: props.sliderId,
+    //     name: formValues.name,
+    //     image: formValues.image,
+    //   }
+    // );
+    console.log("Edit");
+    // } else {
+    await axios.post(
+      `http://localhost:3001/slidermanagement/insert`,
+
+      {
+        name: formValues.name,
+        image: formValues.image,
+      }
+    );
+    console.log("Add Slider");
+    // }
+
     form.resetFields();
   };
 
+  const uploadImageFile = (e) => {
+    console.log(e);
+    // S3.upload(e.target.files[0], config)
+    //   .then((data) => {
+    //     console.log(data);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  };
   return (
     <>
       <Link to="/SliderManagement">
@@ -56,6 +81,9 @@ function Detail(props) {
           Cancel
         </Button>
       </Link>
+      <div>
+        {/* {props.slider._id  ? <h5>Edit Slider</h5> : <h5>Add Slider</h5>} */}
+      </div>
       <Form
         form={form}
         {...layout}
@@ -72,14 +100,16 @@ function Detail(props) {
 
         <Form.Item
           label="Image"
-          name="image"
           className="uploadFile"
           rules={[{ required: true, message: "Please input text" }]}
         >
-          {/* <Upload {...props}>
-            <Button icon={<UploadOutlined />}>Upload</Button>
+          {/* <Upload {...test}>
+            <Button icon={<UploadOutlined />} onChange={uploadImageFile()}>
+              Upload
+            </Button>
           </Upload> */}
-          <Input className="inputField" />
+
+          <Input type="file" className="inputFileField" />
         </Form.Item>
 
         <Form.Item className="saveBtn">

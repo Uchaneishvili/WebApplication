@@ -169,13 +169,13 @@ app.delete("/cars/delete/:id", async (req, res) => {
 });
 
 app.put("/cars/update", async (req, res) => {
-  const { manufacturer, model, _id } = req.body;
+  const { manufacturer, tts, _id } = req.body;
   console.log(req.body);
 
   try {
     const updateCar = await carsModel.findById(_id);
     updateCar.manufacturer = manufacturer;
-    updateCar.model = model;
+    updateCar.tts = model;
     updateCar.save();
     res.send("update");
   } catch (err) {
