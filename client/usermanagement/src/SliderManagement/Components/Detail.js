@@ -3,6 +3,7 @@ import { Form, Input, Button, Upload } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { UploadOutlined } from "@ant-design/icons";
+import Axios from "axios";
 
 // import { aws } from "../../keys";
 import S3 from "react-aws-s3";
@@ -26,21 +27,25 @@ function Detail(props) {
   const [form] = useForm();
 
   useEffect(() => {
-    form.setFieldsValue(props.slider);
-  }, [props.slider]);
+    console.log(props.match.params.id);
+    loadData(props.match.params.id);
+  }, []);
+
+  const loadData = async (id) => {
+    let url = `http://localhost:3001/slidermanagement/read/${id}`;
+    await Axios.get(url).then((response) => {
+      form.setFieldsValue(response.data);
+    });
+  };
 
   const addOrUpdateSlider = async () => {
     console.log(form.getFieldValue());
     const formValues = form.getFieldValue();
     await form.validateFields();
 
-    console.log("details", props.slider);
-    console.log("details sliderId", props.sliderId);
-    console.log("setSlider");
-
     // if (props.slider) {
     // await axios.put(
-    //   `http://localhost:3001//slidermanagement/edit/:${props.sliderId}`,
+    //   `http://localhost:3001//slidermanagement/edit/${props.sliderId}`,
 
     //   {
     //     _id: props.sliderId,
@@ -48,7 +53,6 @@ function Detail(props) {
     //     image: formValues.image,
     //   }
     // );
-    console.log("Edit");
     // } else {
     await axios.post(
       `http://localhost:3001/slidermanagement/insert`,
@@ -99,6 +103,7 @@ function Detail(props) {
         </Form.Item>
 
         <Form.Item
+          name="image"
           label="Image"
           className="uploadFile"
           rules={[{ required: true, message: "Please input text" }]}
@@ -109,7 +114,11 @@ function Detail(props) {
             </Button>
           </Upload> */}
 
-          <Input type="file" className="inputFileField" />
+          <Input
+            type="file"
+            className="inputFileField"
+            onChange={uploadImageFile}
+          />
         </Form.Item>
 
         <Form.Item className="saveBtn">

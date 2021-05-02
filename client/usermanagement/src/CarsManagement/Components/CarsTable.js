@@ -39,21 +39,21 @@ function CarsTable() {
     filterFields
   ) => {
     let url = `http://localhost:3001/cars/read?page=${page}`;
-    // if (search) {
-    //   url += `&search=${search}`;
-    // }
+    if (search) {
+      url += `&search=${search}`;
+    }
 
     if (sortField) {
       url += `&sortField=${sortField}&sortDirection=${sortDirection}`;
     }
 
-    // if (filterFields) {
-    //   Object.keys(filterFields).forEach((key) => {
-    //     const joinedFilterValue = filterFields[key]?.join();
-    //     url += `&${key}=${joinedFilterValue}`;
-    //     console.log(joinedFilterValue);
-    //   });
-    // }
+    if (filterFields) {
+      Object.keys(filterFields).forEach((key) => {
+        const joinedFilterValue = filterFields[key]?.join();
+        url += `&${key}=${joinedFilterValue}`;
+        console.log(joinedFilterValue);
+      });
+    }
 
     await Axios.get(url).then((response) => {
       setCarsList(response.data.data);
@@ -90,15 +90,15 @@ function CarsTable() {
       filters: [
         {
           text: "Opel",
-          value: "opel",
+          value: "Opel",
         },
         {
           text: "Ford",
-          value: "ford",
+          value: "Ford",
         },
         {
           text: "Toyota",
-          value: "toyota",
+          value: "Toyota",
         },
       ],
     },
@@ -109,11 +109,11 @@ function CarsTable() {
       filters: [
         {
           text: "corsa",
-          value: "corsa",
+          value: "Corsa",
         },
         {
           text: "Vectra",
-          value: "vectra",
+          value: "Vectra",
         },
       ],
     },

@@ -21,6 +21,10 @@ function SliderManagement() {
     console.log("sliderManagement ID", slider._id);
   };
 
+  useEffect(() => {
+    console.log(slider);
+  }, [slider]);
+
   const addSlider = () => {
     setSlider({});
     console.log("addSlider");
@@ -40,7 +44,7 @@ function SliderManagement() {
       dataIndex: "_id",
       render: (id, slider) => (
         <div>
-          <Link to={`SliderManagement/edit/:${id}`}>
+          <Link to={`SliderManagement/edit/${id}`}>
             <Button onClick={() => editSlider(slider)}>
               <EditOutlined />
             </Button>
@@ -112,9 +116,6 @@ function SliderManagement() {
           pagination={false}
           rowKey={(slider) => slider._id}
         />
-      </div>
-      <div className="test">
-        <Detail slider={slider} sliderId={slider._id} />
       </div>
     </div>
   );

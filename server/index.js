@@ -58,29 +58,35 @@ app.get("/cars/read", async (req, res) => {
   try {
     const { search, sortDirection, sortField, model, manufacturer } = req.query;
     const q = {};
-    q["$or"] = [{}];
-    const strArr = [];
+    q["$or"];
 
     if (model) {
       model.split(",").forEach((value) => {
-        q["$or"] = [{ model: value }];
-        // q["or"].push({ model: value });
-        strArr.push(q["$or"]);
-        console.log(strArr);
+        if (!q["$or"]) {
+          q["$or"] = [{ model: value }];
+        } else {
+          q["$or"].push({ model: value });
+        }
       });
     }
 
     if (manufacturer) {
       manufacturer.split(",").forEach((value) => {
-        q["$or"].push({ manufacturer: value });
-        // q["$or"] = [{ manufacturer: value }];
+        if (!q["$or"]) {
+          q["$or"] = [{ manufacturer: value }];
+        } else {
+          q["$or"].push({ manufacturer: value });
+        }
       });
     }
 
     if (search) {
-      // q["$or"] = [{ manufacturer: search }, { model: search }];
-      q["$or"].push({ manufacturer: search });
-      q["$or"].push({ model: search });
+      if (!q["$or"]) {
+        q["$or"] = [{ manufacturer: search }, { model: search }];
+      } else {
+        q["$or"].push({ manufacturer: search });
+        q["$or"].push({ model: search });
+      }
     }
 
     const sortInCar = {};
@@ -209,6 +215,18 @@ app.delete("/delete/:id", async (req, res) => {
 });
 
 //Slider Management
+
+app.get("/slidermanagement/read/:id", async (req, res) => {
+  const id = req.params.id;
+
+  sliderModel.findById(id, (err, result) => {
+    if (err) {
+      res.send(err);
+    }
+
+    res.send(result);
+  });
+});
 
 app.get("/slidermanagement/read", async (req, res) => {
   sliderModel.find({}, (err, result) => {

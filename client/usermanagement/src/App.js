@@ -1,29 +1,18 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import UserManagement from "./UserManagement/UserManagement";
 import CarsManagement from "./CarsManagement/CarsManagement";
 import SliderManagement from "./SliderManagement/SliderManagement";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Layout, Menu, Breadcrumb } from "antd";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Layout, Breadcrumb } from "antd";
 import Detail from "./SliderManagement/Components/Detail";
-import {
-  UserOutlined,
-  HomeOutlined,
-  CarOutlined,
-  SlidersOutlined,
-} from "@ant-design/icons";
+import { HomeOutlined } from "@ant-design/icons";
 import Slider from "./Slider";
+import Sidebar from "./Sidebar";
 
 function App() {
-  const { Header, Content, Sider } = Layout;
-  const [collapsed, setCollapsed] = useState(false);
+  const { Header, Content } = Layout;
   let title = null;
-
-  useEffect(() => {
-    return () => {
-      setCollapsed(collapsed);
-    };
-  }, [collapsed]);
 
   if (window.location.pathname == "/UserManagement") {
     title = "User Management";
@@ -39,34 +28,7 @@ function App() {
     <div>
       <Router>
         <Layout style={{ minHeight: "100vh" }}>
-          <Sider
-            collapsible
-            onCollapse={() => setCollapsed(collapsed)}
-            style={{
-              overflow: "auto",
-              height: "100vh",
-              position: "fixed",
-              left: 0,
-            }}
-          >
-            <div className="logo" />
-            <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
-              <Menu.Item className="" key="1" icon={<HomeOutlined />}>
-                <Link to="/CarsManagement">Home</Link>
-              </Menu.Item>
-
-              <Menu.Item key="2" icon={<UserOutlined />}>
-                <Link to="/UserManagement">User Management</Link>
-              </Menu.Item>
-
-              <Menu.Item key="3" icon={<CarOutlined />}>
-                <Link to="/CarsManagement">Car Management</Link>
-              </Menu.Item>
-              <Menu.Item className="" key="4" icon={<SlidersOutlined />}>
-                <Link to="/SliderManagement">Slider Management</Link>
-              </Menu.Item>
-            </Menu>
-          </Sider>
+          <Sidebar />
           <Layout className="site-layout" style={{ marginLeft: 200 }}>
             <Header
               className="site-layout-background-header"
@@ -103,10 +65,15 @@ function App() {
                     component={SliderManagement}
                   />
                   <Route
+                    exact
+                    path="/SliderManagement/edit/:id"
+                    component={Detail}
+                  />
+
+                  <Route
                     component={Detail}
                     path={"/SliderManagement/addSlider"}
                   />
-                  <Route component={Detail} path={"/SliderManagement/edit"} />
                 </div>
               </div>
             </Content>
