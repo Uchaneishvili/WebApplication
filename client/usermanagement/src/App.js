@@ -36,21 +36,6 @@ function App() {
             />
 
             <Content style={{ margin: "0 16px" }}>
-              <div className="breadCrumb">
-                <Breadcrumb style={{ margin: "16px 0" }}>
-                  <Breadcrumb.Item href="/">
-                    <HomeOutlined />
-                  </Breadcrumb.Item>
-                  <Breadcrumb.Item>{title}</Breadcrumb.Item>
-                </Breadcrumb>
-              </div>
-              <Header
-                className="site-layout-background-title"
-                style={{ padding: 0 }}
-              >
-                <b>{title}</b>
-              </Header>
-
               <div className="content-container">
                 <div
                   className="site-layout-background"

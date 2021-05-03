@@ -3,6 +3,8 @@ import { Table, Button } from "antd";
 import { PlusOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { Popconfirm, message } from "antd";
+import { Layout, Breadcrumb } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
 import Axios from "axios";
 import Detail from "./Components/Detail";
 import "./SliderManagement.css";
@@ -14,6 +16,7 @@ function SliderManagement() {
   const rowSelection = {
     selectedRowKeys,
   };
+  const { Header } = Layout;
 
   const editSlider = (slider) => {
     setSlider(slider);
@@ -86,7 +89,18 @@ function SliderManagement() {
 
   return (
     <div>
-      <pre>{JSON.stringify(slider)}</pre>
+      <div className="breadCrumb">
+        <Breadcrumb style={{ margin: "16px 0" }}>
+          <Breadcrumb.Item href="/">
+            <HomeOutlined />
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>Slider Management</Breadcrumb.Item>
+        </Breadcrumb>
+
+        <Header className="site-layout-background-title" style={{ padding: 0 }}>
+          <b>Slider Management</b>
+        </Header>
+      </div>
 
       <div>
         <div style={{ marginBottom: 16 }}>
