@@ -43,7 +43,6 @@ function UserTable() {
     await Axios.get(url).then((response) => {
       setuserList(response.data.data);
       setPages(response.data.pages);
-      console.log(response);
     });
   };
 

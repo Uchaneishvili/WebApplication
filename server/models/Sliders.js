@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const slidersSchema = new mongoose.Schema({
   image: {
+    // data: Buffer,
+    // contentType: String,
     type: String,
     required: true,
   },

@@ -1,0 +1,49 @@
+[debug] [2021-05-05T22:27:40.083Z] ----------------------------------------------------------------------
+[debug] [2021-05-05T22:27:40.085Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\gucha\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init
+[debug] [2021-05-05T22:27:40.085Z] CLI Version:   9.10.1
+[debug] [2021-05-05T22:27:40.085Z] Platform:      win32
+[debug] [2021-05-05T22:27:40.086Z] Node Version:  v14.15.5
+[debug] [2021-05-05T22:27:40.086Z] Time:          Thu May 06 2021 02:27:40 GMT+0400 (Georgia Standard Time)
+[debug] [2021-05-05T22:27:40.086Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-05-05T22:27:40.092Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-05-05T22:27:40.092Z] > authorizing via signed-in user (g.uchaneishvili@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\gucha\OneDrive\Desktop\CrudApp
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[info] i  If you want to create a project in a Google Cloud organization or folder, please use "firebase projects:create" instead, and return to this command when you've created the project. 
+[debug] [2021-05-05T22:28:02.626Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects  
+ {"projectId":"crud-frb-slider","name":"crud-frb-slider"}
+[debug] [2021-05-05T22:28:03.632Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 05 May 2021 22:28:06 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=770","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-05-05T22:28:03.637Z] > refreshing access token with scopes: []
+[debug] [2021-05-05T22:28:03.637Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-05-05T22:28:03.913Z] <<< HTTP RESPONSE 200 {"expires":"Mon, 01 Jan 1990 00:00:00 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","date":"Wed, 05 May 2021 22:28:06 GMT","pragma":"no-cache","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-05-05T22:28:03.935Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.8632614870579632737 [none]
+[debug] [2021-05-05T22:28:05.009Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.8632614870579632737 200
+[debug] [2021-05-05T22:28:05.009Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/operations/cp.8632614870579632737 {"name":"operations/cp.8632614870579632737","metadata":{"@type":"type.googleapis.com/google.cloudresourcemanager.v1.ProjectCreationStatus","ready":true},"done":true,"error":{"code":9,"message":"Callers must accept Terms of Service","details":[{"@type":"type.googleapis.com/google.rpc.PreconditionFailure","violations":[{"type":"TOS","subject":"cloud","description":"Callers must accept Terms of Service"}]}]}}
+[debug] [2021-05-05T22:28:05.240Z] FirebaseError: Callers must accept Terms of Service
+    at OperationPoller.poll (C:\Users\gucha\AppData\Roaming\npm\node_modules\firebase-tools\lib\operation-poller.js:23:19)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at async createCloudProject (C:\Users\gucha\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:181:29)
+    at async Object.createFirebaseProjectAndLog (C:\Users\gucha\AppData\Roaming\npm\node_modules\firebase-tools\lib\management\projects.js:46:9)
+    at async promptAndCreateNewProject (C:\Users\gucha\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\features\project.js:32:12)
+    at async Object.doSetup [as project] (C:\Users\gucha\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\features\project.js:87:27)
+    at async init (C:\Users\gucha\AppData\Roaming\npm\node_modules\firebase-tools\lib\init\index.js:19:9)
+[error] 
+[error] Error: Failed to create project. See firebase-debug.log for more info.

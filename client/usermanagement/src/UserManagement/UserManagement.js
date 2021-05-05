@@ -4,7 +4,7 @@ import { Layout, Breadcrumb } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 
 function UserManagement() {
-  const { Header, Content } = Layout;
+  const { Header } = Layout;
 
   return (
     <div>

@@ -17,7 +17,6 @@ function Popup(props) {
   }, [props.modal]);
 
   const addOrUpdateCar = async () => {
-    console.log(form.getFieldValue());
     const formValues = form.getFieldValue();
     await form.validateFields();
 

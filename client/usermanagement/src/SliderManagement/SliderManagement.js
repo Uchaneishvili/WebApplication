@@ -20,17 +20,12 @@ function SliderManagement() {
 
   const editSlider = (slider) => {
     setSlider(slider);
-    console.log("sliderManagement", slider);
-    console.log("sliderManagement ID", slider._id);
   };
 
-  useEffect(() => {
-    console.log(slider);
-  }, [slider]);
+  useEffect(() => {}, [slider]);
 
   const addSlider = () => {
     setSlider({});
-    console.log("addSlider");
   };
 
   const columns = [
@@ -65,7 +60,6 @@ function SliderManagement() {
               <DeleteOutlined />
             </Button>
           </Popconfirm>
-          {/* </Button> */}
         </div>
       ),
     },

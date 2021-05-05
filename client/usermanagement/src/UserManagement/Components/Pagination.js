@@ -20,7 +20,6 @@ function Pagination(props) {
   function onClickButton(i) {
     setClickState(true);
     setPage(i);
-    console.log(clickState);
   }
 
   function generatePages(pagenum) {

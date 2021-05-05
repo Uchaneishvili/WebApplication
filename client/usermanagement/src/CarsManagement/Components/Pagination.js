@@ -8,7 +8,6 @@ function PaginationFnct(props) {
 
   useEffect(() => {
     props.loadData(page);
-    console.log(props.carsList);
   }, [page]);
 
   const previousPage = () => {

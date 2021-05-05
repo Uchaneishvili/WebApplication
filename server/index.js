@@ -17,7 +17,6 @@ mongoose.connect(
 );
 
 app.post("/insert", async (req, res) => {
-  console.log(req.body);
   const { firstName, lastName, phone, email } = req.body;
 
   const user = new userModel({
@@ -38,8 +37,6 @@ app.post("/insert", async (req, res) => {
 
 app.post("/cars/insert", async (req, res) => {
   const { manufacturer, model } = req.body;
-
-  console.log(req.body);
 
   const cars = new carsModel({
     manufacturer: manufacturer,
@@ -99,7 +96,6 @@ app.get("/cars/read", async (req, res) => {
     const pageSize = parseInt(req.query.pageSize) || 10;
     const skip = (page - 1) * pageSize;
     const total = await carsModel.countDocuments(q);
-    console.log("test", q);
 
     const result = await carsModel
       .find(q)
@@ -148,7 +144,6 @@ app.get("/read", async (req, res) => {
 
     query = query.skip(skip).limit(pageSize);
     const result = await query;
-    console.log("querySearch", querySearch);
 
     res.status(200).json({
       status: "Success",
@@ -175,13 +170,12 @@ app.delete("/cars/delete/:id", async (req, res) => {
 });
 
 app.put("/cars/update", async (req, res) => {
-  const { manufacturer, tts, _id } = req.body;
-  console.log(req.body);
+  const { manufacturer, model, _id } = req.body;
 
   try {
     const updateCar = await carsModel.findById(_id);
     updateCar.manufacturer = manufacturer;
-    updateCar.tts = model;
+    updateCar.model = model;
     updateCar.save();
     res.send("update");
   } catch (err) {
@@ -190,7 +184,6 @@ app.put("/cars/update", async (req, res) => {
 });
 
 app.put("/update", async (request, res) => {
-  console.log(request.body);
   const { firstName, lastName, phone, email, _id } = request.body;
 
   try {
@@ -241,8 +234,6 @@ app.get("/slidermanagement/read", async (req, res) => {
 app.post("/slidermanagement/insert", async (req, res) => {
   const { image, name } = req.body;
 
-  console.log(req.body);
-
   const sliders = new sliderModel({
     image: image,
     name: name,
@@ -268,8 +259,8 @@ app.put("/slidermanagement/edit/:id", async (req, res) => {
 
   try {
     const updateSlider = await sliderModel.findById(_id);
-    updateSlider.name = name;
     updateSlider.image = image;
+    updateSlider.name = name;
     updateSlider.save();
 
     res.send("update slider");

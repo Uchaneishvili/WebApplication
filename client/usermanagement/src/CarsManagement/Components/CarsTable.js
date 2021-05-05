@@ -28,7 +28,6 @@ function CarsTable() {
   const editCar = (car) => {
     setModal(true);
     setCar(car);
-    console.log("editcar");
   };
 
   const loadData = async (
@@ -51,7 +50,6 @@ function CarsTable() {
       Object.keys(filterFields).forEach((key) => {
         const joinedFilterValue = filterFields[key]?.join();
         url += `&${key}=${joinedFilterValue}`;
-        console.log(joinedFilterValue);
       });
     }
 
@@ -66,7 +64,6 @@ function CarsTable() {
     await Axios.delete(`http://localhost:3001/cars/delete/${id}`);
     loadData();
     setConfirmPopup(false);
-    console.log("test");
   };
 
   const closePopup = () => {
@@ -149,8 +146,6 @@ function CarsTable() {
 
   return (
     <div className="container">
-      <pre>{JSON.stringify(car)}</pre>
-
       <div className="SearchAndAddUserContainer">
         <div className="centerButtonContainer">
           <Button
