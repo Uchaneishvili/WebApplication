@@ -3,61 +3,25 @@ import { useForm } from "react-hook-form";
 import Axios from "axios";
 import Modal from "react-modal";
 import "./Popup.css";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup.object().shape({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup.string().required(),
+  phone: yup.number().required().min(6),
+});
+
 function Popup(props) {
   const [modalIsOpen, setmodalIsOpen] = useState(false);
-  const { register, handleSubmit, errors } = useForm();
-  const [buttonIsDisabled, setButtonIsDisabled] = useState(true);
+  const { register, handleSubmit, errors } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-  const onSubmitInsert = () => {
-    if (
-      props.selectedEditUser.firstName != undefined &&
-      props.selectedEditUser.lastName != undefined &&
-      props.selectedEditUser.email != undefined &&
-      props.selectedEditUser.phone != undefined &&
-      props.selectedEditUser.phone.length == 9
-    ) {
-      props.loadData(1);
-      props.closePopup();
-    }
-  };
-
-  const onSubmit = () => {
-    if (
-      props.selectedEditUser.firstName &&
-      props.selectedEditUser.lastName &&
-      props.selectedEditUser.email &&
-      props.selectedEditUser.phone &&
-      props.selectedEditUser.phone.length == 9
-    ) {
-      props.loadData(1);
-      props.closePopup();
-      setButtonIsDisabled(false);
-    } else if (
-      props.selectedEditUser.firstName != undefined &&
-      props.selectedEditUser.lastName != undefined &&
-      props.selectedEditUser.email != undefined &&
-      props.selectedEditUser.phone != undefined &&
-      props.selectedEditUser.phone.length == undefined
-    ) {
-      props.loadData(1);
-      props.closePopup();
-      setButtonIsDisabled(false);
-    }
-
-    return <h1>test</h1>;
-  };
-
-  const onSubmitupdate = () => {
-    if (
-      props.selectedEditUser.firstName != undefined &&
-      props.selectedEditUser.lastName != undefined &&
-      props.selectedEditUser.email != undefined &&
-      props.selectedEditUser.phone != undefined &&
-      props.selectedEditUser.phone.length == undefined
-    ) {
-      props.loadData(1);
-      props.closePopup();
-    }
+  const submit = (data) => {
+    console.log(data);
+    console.log(errors);
   };
 
   useEffect(() => {
@@ -73,8 +37,6 @@ function Popup(props) {
         email: props.selectedEditUser.email,
         phone: props.selectedEditUser.phone,
       });
-      onSubmitupdate();
-      setButtonIsDisabled(true);
     } else {
       await Axios.post("http://localhost:3001/insert", {
         firstName: props.selectedEditUser.firstName,
@@ -82,8 +44,6 @@ function Popup(props) {
         email: props.selectedEditUser.email,
         phone: props.selectedEditUser.phone,
       });
-      onSubmitInsert();
-      setButtonIsDisabled(true);
     }
   };
 
@@ -92,7 +52,6 @@ function Popup(props) {
       ...props.selectedEditUser,
       lastName: event.target.value,
     });
-    setButtonIsDisabled(false);
   };
 
   const firstNameFunction = (event) => {
@@ -100,7 +59,6 @@ function Popup(props) {
       ...props.selectedEditUser,
       firstName: event.target.value,
     });
-    setButtonIsDisabled(false);
   };
 
   const emailFunction = (event) => {
@@ -108,7 +66,6 @@ function Popup(props) {
       ...props.selectedEditUser,
       email: event.target.value,
     });
-    setButtonIsDisabled(false);
   };
 
   const phoneFunction = (event) => {
@@ -116,7 +73,6 @@ function Popup(props) {
       ...props.selectedEditUser,
       phone: event.target.value,
     });
-    setButtonIsDisabled(false);
   };
 
   return (
@@ -145,7 +101,10 @@ function Popup(props) {
             </div>
 
             <div>
-              <form className="popupForm" onSubmit={handleSubmit(onSubmit)}>
+              <form
+                className="popupForm"
+                onSubmit={handleSubmit(() => submit())}
+              >
                 <div className="form-group popup">
                   <label>First Name: </label>
                   <input
@@ -155,14 +114,14 @@ function Popup(props) {
                     placeholder="Enter your first name"
                     aria-label="Firstname"
                     name="firstName"
-                    ref={register({ required: true })}
+                    {...register("firstName", { required: true })}
                     onChange={(event) => {
                       firstNameFunction(event);
                     }}
                   />
-                  {errors.firstName && (
+                  {/* {errors.firstName && (
                     <div className="validation">Please choose a username.</div>
-                  )}
+                  )} */}
                 </div>
 
                 <div className="form-group popup">
@@ -173,14 +132,19 @@ function Popup(props) {
                     className="form-control"
                     placeholder="Enter your last name"
                     name="lastName"
-                    ref={register({ required: true })}
+                    {...register("lastName", { required: true })}
                     onChange={(event) => {
                       lastNameFunction(event);
                     }}
                   />
-                  {errors.lastName && (
+
+                  {/* <div className="validation">
+                    <p>{errors.lastName}Please, enter your last name.</p>
+                  </div> */}
+
+                  {/* {errors.lastName && (
                     <div className="validation">Please choose a username.</div>
-                  )}
+                  )} */}
                 </div>
 
                 <div className="form-group popup">
@@ -191,15 +155,15 @@ function Popup(props) {
                     className="form-control"
                     placeholder="Enter your email"
                     name="email"
-                    ref={register({ required: true })}
+                    {...register("email", { required: true })}
                     onChange={(event) => {
                       emailFunction(event);
                     }}
                   />
 
-                  {errors.email && (
+                  {/* {errors.email && (
                     <div className="validation">Please choose a username.</div>
-                  )}
+                  )} */}
                 </div>
 
                 <div className="form-group popup">
@@ -210,40 +174,23 @@ function Popup(props) {
                     className="form-control"
                     placeholder="Enter your phone"
                     name="phone"
-                    ref={register({
-                      required: true,
-                      minLength: 9,
-                      maxLength: 9,
-                    })}
+                    {...register("phone", { required: true })}
                     onChange={(event) => {
                       phoneFunction(event);
                     }}
                   />
-
-                  {errors.phone && (
-                    <div className="validation">Please choose a username.</div>
-                  )}
-                </div>
-
-                <div className="buttonOfModal">
-                  <button
-                    type="button"
-                    className="btn btn-secondary closeButton"
-                    data-bs-dismiss="modal"
-                    onClick={() => props.closePopup()}
-                  >
-                    Close
-                  </button>
-                  <button
-                    className="btn btn-primary saveButton"
-                    disabled={buttonIsDisabled}
-                    onClick={() => addOrUpdateUser()}
-                    type="submit"
-                  >
-                    Save
-                  </button>
                 </div>
               </form>
+
+              <div className="saveButtonContainer">
+                <button
+                  className="btn btn-primary saveButton"
+                  onClick={() => addOrUpdateUser()}
+                  type="submit"
+                >
+                  Save
+                </button>
+              </div>
             </div>
           </div>
         </div>

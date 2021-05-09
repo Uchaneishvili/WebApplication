@@ -16,7 +16,10 @@ mongoose.connect(
   }
 );
 
+//User Management
+
 app.post("/insert", async (req, res) => {
+  //Create
   const { firstName, lastName, phone, email } = req.body;
 
   const user = new userModel({
@@ -35,7 +38,80 @@ app.post("/insert", async (req, res) => {
   }
 });
 
+app.get("/read", async (req, res) => {
+  //Read
+  try {
+    const { search, sortDirection, sortField } = req.query;
+    const querySearch = {};
+    if (search) {
+      querySearch["$or"] = [{ firstName: search }, { lastName: search }];
+    }
+
+    const sort = {};
+
+    if (sortField) {
+      sort[sortField] = sortDirection === "asc" ? 1 : -1;
+    }
+
+    let query = userModel.find(querySearch).sort(sort);
+
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+    const skip = (page - 1) * pageSize;
+    const total = await userModel.countDocuments(querySearch);
+
+    const pages = Math.ceil(total / pageSize);
+
+    query = query.skip(skip).limit(pageSize);
+    const result = await query;
+
+    res.status(200).json({
+      status: "Success",
+      count: result.length,
+      page,
+      pages,
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      status: "Failed",
+      message: "Server Error",
+    });
+  }
+});
+
+app.put("/update", async (request, res) => {
+  //Update
+  const { firstName, lastName, phone, email, _id } = request.body;
+
+  try {
+    const updateUser = await userModel.findById(_id);
+    updateUser.firstName = firstName;
+    updateUser.lastName = lastName;
+    updateUser.email = email;
+    updateUser.phone = phone;
+    updateUser.save();
+
+    res.send("Update");
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.delete("/delete/:id", async (req, res) => {
+  // Delete
+  const id = req.params.id;
+
+  await userModel.findByIdAndRemove(id).exec();
+  res.send("deleted");
+});
+
+//Cars Management
+
 app.post("/cars/insert", async (req, res) => {
+  // Create
   const { manufacturer, model } = req.body;
 
   const cars = new carsModel({
@@ -52,6 +128,7 @@ app.post("/cars/insert", async (req, res) => {
 });
 
 app.get("/cars/read", async (req, res) => {
+  //Read
   try {
     const { search, sortDirection, sortField, model, manufacturer } = req.query;
     const q = {};
@@ -119,57 +196,8 @@ app.get("/cars/read", async (req, res) => {
   }
 });
 
-app.get("/read", async (req, res) => {
-  try {
-    const { search, sortDirection, sortField } = req.query;
-    const querySearch = {};
-    if (search) {
-      querySearch["$or"] = [{ firstName: search }, { lastName: search }];
-    }
-
-    const sort = {};
-
-    if (sortField) {
-      sort[sortField] = sortDirection === "asc" ? 1 : -1;
-    }
-
-    let query = userModel.find(querySearch).sort(sort);
-
-    const page = parseInt(req.query.page) || 1;
-    const pageSize = parseInt(req.query.pageSize) || 10;
-    const skip = (page - 1) * pageSize;
-    const total = await userModel.countDocuments(querySearch);
-
-    const pages = Math.ceil(total / pageSize);
-
-    query = query.skip(skip).limit(pageSize);
-    const result = await query;
-
-    res.status(200).json({
-      status: "Success",
-      count: result.length,
-      page,
-      pages,
-      data: result,
-    });
-  } catch (error) {
-    console.log(error);
-
-    res.status(500).json({
-      status: "Failed",
-      message: "Server Error",
-    });
-  }
-});
-
-app.delete("/cars/delete/:id", async (req, res) => {
-  const id = req.params.id;
-
-  await carsModel.findByIdAndRemove(id).exec();
-  res.send("deleted");
-});
-
 app.put("/cars/update", async (req, res) => {
+  //Update
   const { manufacturer, model, _id } = req.body;
 
   try {
@@ -183,33 +211,17 @@ app.put("/cars/update", async (req, res) => {
   }
 });
 
-app.put("/update", async (request, res) => {
-  const { firstName, lastName, phone, email, _id } = request.body;
-
-  try {
-    const updateUser = await userModel.findById(_id);
-    updateUser.firstName = firstName;
-    updateUser.lastName = lastName;
-    updateUser.email = email;
-    updateUser.phone = phone;
-    updateUser.save();
-
-    res.send("Update");
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-app.delete("/delete/:id", async (req, res) => {
+app.delete("/cars/delete/:id", async (req, res) => {
   const id = req.params.id;
 
-  await userModel.findByIdAndRemove(id).exec();
+  await carsModel.findByIdAndRemove(id).exec();
   res.send("deleted");
 });
 
 //Slider Management
 
 app.get("/slidermanagement/read/:id", async (req, res) => {
+  //Read Details
   const id = req.params.id;
 
   sliderModel.findById(id, (err, result) => {
@@ -222,6 +234,7 @@ app.get("/slidermanagement/read/:id", async (req, res) => {
 });
 
 app.get("/slidermanagement/read", async (req, res) => {
+  //Read
   sliderModel.find({}, (err, result) => {
     if (err) {
       res.send(err);
@@ -232,6 +245,7 @@ app.get("/slidermanagement/read", async (req, res) => {
 });
 
 app.post("/slidermanagement/insert", async (req, res) => {
+  //Create
   const { image, name } = req.body;
 
   const sliders = new sliderModel({
@@ -248,6 +262,7 @@ app.post("/slidermanagement/insert", async (req, res) => {
 });
 
 app.delete("/slidermanagement/delete/:id", async (req, res) => {
+  //Delete
   const id = req.params.id;
 
   await sliderModel.findByIdAndRemove(id).exec();
@@ -255,6 +270,7 @@ app.delete("/slidermanagement/delete/:id", async (req, res) => {
 });
 
 app.put("/slidermanagement/edit/:id", async (req, res) => {
+  //Update
   const { image, name, _id } = req.body;
 
   try {

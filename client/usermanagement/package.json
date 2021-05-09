@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@hookform/devtools": "^3.0.2",
+    "@hookform/resolvers": "^2.4.0",
     "@syncfusion/ej2-react-grids": "^18.4.43",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
@@ -19,7 +21,7 @@
     "react-aws-s3": "^1.5.0",
     "react-bootstrap": "^1.4.3",
     "react-dom": "^17.0.1",
-    "react-hook-form": "^6.15.4",
+    "react-hook-form": "^7.5.0",
     "react-modal": "^3.12.1",
     "react-responsive-carousel": "^3.2.14",
     "react-router-dom": "^5.2.0",

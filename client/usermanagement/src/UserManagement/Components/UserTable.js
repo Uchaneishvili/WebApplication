@@ -214,6 +214,7 @@ function UserTable() {
         modalIsOpen={modalIsOpen}
         closePopup={closePopup}
         loadData={loadData}
+        userList={userList}
         pages={pages}
       />
       <Pagination loadData={loadData} totalPages={pages} />

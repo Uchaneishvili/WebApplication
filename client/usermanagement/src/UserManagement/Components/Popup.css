@@ -4,17 +4,15 @@
   padding-right: 20px;
 }
 
-.buttonOfModal {
-  text-align: end;
-}
-
-.closeButton {
-  margin: 5px;
-  vertical-align: top !important;
-}
-
 .saveButton {
-  margin: 5px;
+  width: 50%;
+  text-align: center;
+  justify-content: center;
+}
+
+.saveButtonContainer {
+  padding-top: 5%;
+  text-align: center;
 }
 
 .validation {
