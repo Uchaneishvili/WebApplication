@@ -9,23 +9,19 @@ import Detail from "./SliderManagement/Components/Detail";
 import { HomeOutlined } from "@ant-design/icons";
 import Slider from "./Slider";
 import Sidebar from "./Sidebar";
+import { Translation } from "react-i18next";
+import i18n from "./Translations";
 
 function App() {
   const { Header, Content } = Layout;
-  let title = null;
-
-  if (window.location.pathname == "/UserManagement") {
-    title = "User Management";
-  } else if (window.location.pathname == "/CarsManagement") {
-    title = "Cars Management";
-  } else if (window.location.pathname == "/Home") {
-    title = "";
-  } else if (window.location.pathname == "/SliderManagement") {
-    title = "Slider Management";
-  }
 
   return (
     <div>
+      {/* <nav> */}
+      {/* <button onClick={() => LanguageSelectorClick("en")}>English</button> */}
+      {/* <button onClick={() => LanguageSelectorClick("ge")}>Georgian</button> */}
+      {/* <button onClick={() => LanguageSelectorClick("ru")}>Russian</button> */}
+      {/* </nav> */}
       <Router>
         <Layout style={{ minHeight: "100vh" }}>
           <Sidebar />
