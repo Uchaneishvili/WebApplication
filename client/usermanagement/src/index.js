@@ -4,8 +4,6 @@ import "./index.css";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import "./Translations.js";
-
 ReactDOM.render(
   <Suspense fallback={<div>Loading...</div>}>
     <App />

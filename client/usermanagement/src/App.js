@@ -10,7 +10,6 @@ import { HomeOutlined } from "@ant-design/icons";
 import Slider from "./Slider";
 import Sidebar from "./Sidebar";
 import { Translation } from "react-i18next";
-import i18n from "./Translations";
 
 function App() {
   const { Header, Content } = Layout;

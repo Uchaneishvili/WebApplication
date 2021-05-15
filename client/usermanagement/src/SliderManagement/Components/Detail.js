@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Form, Input, Button, Upload, Slider } from "antd";
+import { Form, Input, Button, Upload } from "antd";
 import { useForm } from "antd/lib/form/Form";
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
-import { UploadOutlined } from "@ant-design/icons";
-import { base } from "../../base";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 import { Layout, Breadcrumb } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 import Axios from "axios";
-
-import S3 from "react-aws-s3";
 import axios from "axios";
 
 import "./Detail.css";
@@ -24,6 +20,7 @@ function Detail(props) {
     selectedFile: null,
     selectedFileList: [],
   });
+  const [selectedImage, setSelectedImage] = useState();
 
   useEffect(() => {
     loadData(props.match.params.id);
@@ -34,6 +31,7 @@ function Detail(props) {
       let url = `http://localhost:3001/slidermanagement/read/${id}`;
       await Axios.get(url).then((response) => {
         form.setFieldsValue(response.data);
+        setSelectedImage(response.data.image);
       });
     } else {
     }
@@ -65,41 +63,6 @@ function Detail(props) {
     }
 
     form.resetFields();
-  };
-
-  // const onChangeFirebase = (event) => {
-  //   const file = event.file[0];
-  //   const storageRef = base.storageRef().ref();
-  //   const fileRef = storageRef.child(file.name);
-  //   fileRef.put(file).then(() => {
-  //   });
-  // };
-
-  const onChangeFile = (info) => {
-    const nextState = {};
-    switch (info.file.status) {
-      case "uploading":
-        nextState.selectedFileList = [info.file];
-        break;
-
-      case "done":
-        nextState.selectedFile = info.file;
-        nextState.selectedFileList = [info.file];
-
-        break;
-
-      default:
-        // error or removed
-        nextState.selectedFile = null;
-        nextState.selectedFileList = [];
-    }
-    setState(nextState);
-  };
-
-  const dummyRequest = ({ onSuccess }) => {
-    setTimeout(() => {
-      onSuccess("ok");
-    }, 0);
   };
 
   return (
@@ -148,18 +111,14 @@ function Detail(props) {
           label="Image"
           name="image"
           className="uploadFile"
-          enctype="multipart/form-data"
           rules={[{ required: true, message: "Please input text" }]}
         >
-          <Upload
-            fileList={state.selectedFileList}
-            customRequest={dummyRequest}
-            onChange={onChangeFile}
-            accept="image/*"
-          >
-            <Button>Choose File</Button>
+          <Upload fileList={state.selectedFileList} accept="image/*">
+            <div>Choose File</div>
           </Upload>
         </Form.Item>
+        {JSON.stringify(selectedImage)}
+        <img src="C:\fakepath\Untitled.png"></img>
 
         <Form.Item className="saveBtn">
           <Button
