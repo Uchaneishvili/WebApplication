@@ -27,8 +27,8 @@ function Search(props) {
           enterButton="Search"
           size="large"
           placeholder="Input search text"
-          onSearch={() => props.loadData(1, searchVal)}
           value={searchVal}
+          onSearch={() => props.loadData(1, searchVal)}
           onChange={searchInput}
         />
 
