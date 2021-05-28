@@ -131,7 +131,7 @@ app.get("/cars/read", async (req, res) => {
   //Read
   try {
     const { search, sortDirection, sortField, model, manufacturer } = req.query;
-    const q = {};
+    let q = {};
     q["$or"];
 
     if (model) {
@@ -149,10 +149,19 @@ app.get("/cars/read", async (req, res) => {
         if (!q["$or"]) {
           q["$or"] = [{ manufacturer: value }];
         } else {
-          q["$or"].push({ manufacturer: value });
+          if (value != "undefined") {
+            q["$or"].push({ manufacturer: value });
+          } else {
+            q = {};
+          }
         }
       });
     }
+    console.log(q["$or"]);
+
+    // console.log(manufacturer);
+
+    // console.log(q["$or"]);
 
     if (search) {
       if (!q["$or"]) {
