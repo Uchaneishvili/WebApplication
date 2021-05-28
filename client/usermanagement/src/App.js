@@ -6,21 +6,14 @@ import SliderManagement from "./SliderManagement/SliderManagement";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Layout, Breadcrumb } from "antd";
 import Detail from "./SliderManagement/Components/Detail";
-import { HomeOutlined } from "@ant-design/icons";
 import Slider from "./Slider";
 import Sidebar from "./Sidebar";
-import { Translation } from "react-i18next";
 
 function App() {
   const { Header, Content } = Layout;
 
   return (
     <div>
-      {/* <nav> */}
-      {/* <button onClick={() => LanguageSelectorClick("en")}>English</button> */}
-      {/* <button onClick={() => LanguageSelectorClick("ge")}>Georgian</button> */}
-      {/* <button onClick={() => LanguageSelectorClick("ru")}>Russian</button> */}
-      {/* </nav> */}
       <Router>
         <Layout style={{ minHeight: "100vh" }}>
           <Sidebar />
