@@ -2,10 +2,8 @@ import "./App.css";
 import React from "react";
 import UserManagement from "./UserManagement/UserManagement";
 import CarsManagement from "./CarsManagement/CarsManagement";
-import SliderManagement from "./SliderManagement/SliderManagement";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { Layout, Breadcrumb } from "antd";
-import Detail from "./SliderManagement/Components/Detail";
 import Slider from "./Slider";
 import Sidebar from "./Sidebar";
 
@@ -32,21 +30,6 @@ function App() {
                   <Route path="/" exact component={Slider} />
                   <Route path="/UserManagement" component={UserManagement} />
                   <Route path="/CarsManagement" component={CarsManagement} />
-                  <Route
-                    exact
-                    path="/SliderManagement"
-                    component={SliderManagement}
-                  />
-                  <Route
-                    exact
-                    path="/SliderManagement/edit/:id"
-                    component={Detail}
-                  />
-
-                  <Route
-                    component={Detail}
-                    path={"/SliderManagement/addSlider"}
-                  />
                 </div>
               </div>
             </Content>

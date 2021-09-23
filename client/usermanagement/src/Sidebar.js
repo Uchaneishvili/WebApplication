@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Layout, Menu } from "antd";
-import {
-  HomeOutlined,
-  UserOutlined,
-  CarOutlined,
-  SlidersOutlined,
-} from "@ant-design/icons";
+import { HomeOutlined, UserOutlined, CarOutlined } from "@ant-design/icons";
 
 function Sidebar() {
   const { Sider } = Layout;
@@ -52,13 +47,6 @@ function Sidebar() {
 
         <Menu.Item key="CarsManagement" icon={<CarOutlined />}>
           <Link to="/CarsManagement">Car Management</Link>
-        </Menu.Item>
-        <Menu.Item
-          className=""
-          key="SliderManagement"
-          icon={<SlidersOutlined />}
-        >
-          <Link to="/SliderManagement">Slider Management</Link>
         </Menu.Item>
       </Menu>
     </Sider>
